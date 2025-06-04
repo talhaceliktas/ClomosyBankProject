@@ -1,0 +1,14 @@
+{
+  "name": "nodejs-api",
+  "version": "1.0.0",
+  "description": "CPanel üzerinde çalışan Node.js API",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mysql2": "^3.6.0",
+    "dotenv": "^16.4.5"
+  }
+}

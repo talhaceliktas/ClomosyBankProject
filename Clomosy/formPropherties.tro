@@ -1,0 +1,173 @@
+function setButtonHesaplarBtnMobile(AMyForm,AButton,ACaption):TclProButon;
+var
+  customButton : TclProButton;
+{
+  customButton = AMyForm.AddNewProButton(AMyForm, AButton, ACaption);
+  clComponent.SetupComponent(customButton,'{"BackgroundColor":"#d9d9d9", 
+  "BorderWidth":1, "Height":70, "TextSize":15, "BorderColor":"#a5a5a5"}');
+  customButton.Align = alNone
+  customButton.Width = AMyForm.clWidth / 6;
+  customButton.Position.X = 0
+  customButton.Position.Y = AMyForm.clHeight - 250;
+  
+  Result = customButton;
+}
+
+
+function setButtonKartlarBtnMobile(AMyForm,AButton,ACaption):TclProButon;
+var
+  customButton : TclProButton;
+{
+  customButton = AMyForm.AddNewProButton(AMyForm,AButton, ACaption);
+  clComponent.SetupComponent(customButton,'{"BackgroundColor":"#d9d9d9", 
+  "BorderWidth":1, "Height":70, "TextSize":15, "BorderColor":"#a5a5a5"}');
+  customButton.Align = alNone
+  customButton.Width = AMyForm.clWidth / 6;
+  customButton.Position.X = AMyForm.clWidth / 6;
+  customButton.Position.Y = AMyForm.clHeight - 250;
+  
+  Result = customButton;
+}
+
+
+function setButtonParaTransferiBtnMobile(AMyForm,AButton,ACaption):TclProButon;
+var
+  customButton : TclProButton;
+{
+  customButton = AMyForm.AddNewProButton(AMyForm, AButton, ACaption);
+  clComponent.SetupComponent(customButton,'{"BackgroundColor":"#d9d9d9", 
+  "BorderWidth":1, "Height":70, "TextSize":15, "BorderColor":"#a5a5a5"}');
+  customButton.Align = alNone;
+  customButton.Width = AMyForm.clWidth / 6;
+  customButton.Position.X = (AMyForm.clWidth / 6) * 2;
+  customButton.Position.Y = AMyForm.clHeight - 250;
+
+  Result = customButton;
+}
+
+
+
+function setButtonOdemelerBtnMobile(AMyForm,AButton,ACaption):TclProButon;
+var
+  customButton : TclProButton;
+{
+  customButton = AMyForm.AddNewProButton(AMyForm, AButton, ACaption);
+  clComponent.SetupComponent(customButton,'{"BackgroundColor":"#d9d9d9", 
+  "BorderWidth":1, "Height":70, "TextSize":15, "BorderColor":"#a5a5a5"}');
+  customButton.Align = alNone;
+  customButton.Width = AMyForm.clWidth / 6;
+  customButton.Position.X = (AMyForm.clWidth / 6) * 3;
+  customButton.Position.Y = AMyForm.clHeight - 250;
+
+  Result = customButton;
+}
+
+function setButtonKredilerBtnMobile(AMyForm,AButton,ACaption):TclProButon;
+var
+  customButton : TclProButton;
+{
+  customButton = AMyForm.AddNewProButton(AMyForm, AButton, ACaption);
+  clComponent.SetupComponent(customButton,'{"BackgroundColor":"#d9d9d9", 
+  "BorderWidth":1, "Height":70, "TextSize":15, "BorderColor":"#a5a5a5"}');
+  customButton.Align = alNone;
+  customButton.Width = AMyForm.clWidth / 6;
+  customButton.Position.X = (AMyForm.clWidth / 6) * 4;
+  customButton.Position.Y = AMyForm.clHeight - 250;
+
+  Result = customButton;
+}
+
+function setButtonDovizBtnMobile(AMyForm,AButton,ACaption):TclProButon;
+var
+  customButton : TclProButton;
+{
+  customButton = AMyForm.AddNewProButton(AMyForm, AButton, ACaption);
+  clComponent.SetupComponent(customButton,'{"BackgroundColor":"#d9d9d9", 
+  "BorderWidth":1, "Height":70, "TextSize":15, "BorderColor":"#a5a5a5"}');
+  customButton.Align = alNone;
+  customButton.Width = AMyForm.clWidth / 6;
+  customButton.Position.X = (AMyForm.clWidth / 6) * 5;
+  customButton.Position.Y = AMyForm.clHeight - 250;
+
+  Result = customButton;
+}
+
+
+
+function addPCButton(AMyForm, ALayout, AButton, ACaption): TclProButon;
+var
+  customButton : TclProButton;
+{
+  customButton = AMyForm.AddNewProButton(ALayout, AButton, ACaption);
+  clComponent.SetupComponent(customButton,'{"Align":"Top","BackgroundColor":"#d9d9d9", "BorderWidth":1, "Width":90, "Height":76, "TextSize":23, "BorderColor":"#a5a5a5"}');
+  
+  Result = customButton;
+}
+
+
+function addPCImage(AMyForm, AParentBtn, AImgName, AImgUrl): TclProImage;
+var
+  customImage : TclProImage;
+{
+  customImage = AMyForm.AddNewProImage(AParentBtn, AImgName);
+  clComponent.SetupComponent(customImage, '{"Align":"Left","Width":42,"Height":42,"ImgUrl":"' + AImgUrl + '","ImgFit":"yes","MarginLeft":45}');
+  
+  Result = customImage;
+}
+
+
+
+function addPCImageFreePos(AMyForm, ALayout, AName, AUrl, AX, AY): TclProImage;
+var
+  img : TclProImage;
+{
+  img = AMyForm.AddNewProImage(ALayout, AName);
+  clComponent.SetupComponent(img, '{"Width":42,"Height":42,"ImgUrl":"' + AUrl + '","ImgFit":"yes"}');
+  img.Align = alNone;
+  img.Position.X = AX;
+  img.Position.Y = AY;
+  
+  Result = img;
+}
+
+
+function addPCLabelFreePos(AMyForm, ALayout, AName, AText, AX, AY, AFontSize): TclLabel;
+var
+  lbl : TclLabel;
+{
+  lbl = AMyForm.AddNewLabel(ALayout, AName, AText);
+  lbl.Align = alNone;
+  lbl.Width = 228;
+  lbl.Height = 29;
+  lbl.StyledSettings = ssFamily;
+  lbl.TextSettings.Font.Size = AFontSize;
+  lbl.Position.X = AX;
+  lbl.Position.Y = AY;
+
+  Result = lbl;
+}
+
+function addPCLabelCentered(AMyForm, AParent, AName, AText): TclLabel;
+var
+  lbl : TclLabel;
+{
+  lbl = AMyForm.AddNewLabel(AParent, AName, AText);
+  lbl.Align = alCenter;
+  lbl.Width = 228;
+  lbl.Height = 29;
+  lbl.StyledSettings = ssFamily;
+  lbl.TextSettings.Font.Size = 12;
+  lbl.Margins.Top = 50;
+  lbl.Margins.Left = 12;
+
+  Result = lbl;
+}
+
+
+
+
+
+
+
+
+

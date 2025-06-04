@@ -1,0 +1,241 @@
+
+
+var
+loginForm:TclForm;
+logoPanel:TclProPanel;
+tcEdit, sifreEdit: TClProEdit; 
+bankaIsmiLbl, bilgilendirmeLbl:TCLLabel;
+onaylamaCkBx : TclCheckBox;
+girisBtn, kayitBtn: TClProButton;
+kimlikImg, sifreImg: TClProImage;
+clRest : TCLRest; 
+query : String;
+jsonQuerysi: TCLJSONQuery;
+
+void mainiCagir;
+{
+
+  if(onaylamaCkBx.IsChecked == True){
+    
+    clRest=TCLRest.Create; 
+     // Post 
+    
+     
+     clRest.BaseURL = 'https://clomosy.talhaceliktas.com/api/musteriler/kontrol-login'; 
+     clRest.Accept = 'application/json'; 
+     clRest.Method = rmPOST;
+     
+     query = '{"tcKimlik": "' + tcEdit.Text + '","sifre": "' + sifreEdit.Text + '"}';
+     clRest.AddBody(query, 'application/json'); 
+     clRest.Execute;
+     
+    try
+      jsonQuerysi = TCLJSONQuery.Create(nil);  
+      jsonQuerysi = Clomosy.ClDataSetFromJSON('[' + clRest.Response +']');  
+      with jsonQuerysi do
+      {
+        if (Found) 
+        {
+          First; 
+          while (not EOF)  
+          {
+            if(FieldByName('exists').AsString == 'True'){
+                 Clomosy.GlobalVariableString = tcEdit.Text;
+                 Clomosy.RunUnit('mainForm');
+                 loginForm.clHide;
+                 Break;
+            }else{
+              ShowMessage(FieldByName('exists').AsString);
+              Break;
+            }
+            Next;
+          }
+        }
+      }
+    except
+      
+      ShowMessage('Exception Class: '+LastExceptionClassName+' Exception Message: '+LastExceptionMessage);
+    }
+
+  }
+  else{
+    ShowMessage('Lütfen Sözleşmeyi Onaylayınız!');
+  }
+
+}
+
+void kayitMenu;
+{
+    Clomosy.RunUnit('kayitForm');
+}
+
+
+
+{
+  loginForm = TclForm.Create(Self);
+  loginForm.clSetWindowState(fwsmaximized);
+  loginForm.clsetcaption('Login ekranı');
+  TclButton(loginForm.clFindComponent('BtnFormMenu')).Visible = False; 
+  // TclButton(loginForm.clFindComponent('BtnGoBack')).Visible = False; 
+  loginForm.BtnFormMenu.Visible = False;
+  loginForm.FormWaiting.Visible = False;
+  loginForm.addassetfromurl('https://talhaceliktas.com/clomosyImgs/newLoginBG.jpg')
+  loginForm.SetFormBGImage('newLoginBG.jpg');
+ 
+ 
+ 
+  logoPanel = loginForm.AddNewProPanel(loginForm,'logoPanel');
+  clComponent.SetupComponent(logoPanel,'{"Align" : "Top",
+  "BackgroundColor":"#D9D9D9", "Height":109}');
+
+  bankaIsmiLbl = loginForm.AddNewLabel(logoPanel,'bankaIsmiLbl','ClomoBank');
+  bankaIsmiLbl.Align = alLeft
+  bankaIsmiLbl.Margins.Left = 40;
+  bankaIsmiLbl.StyledSettings = ssFamily;
+  bankaIsmiLbl.TextSettings.Font.Size = 40;
+  bankaIsmiLbl.Width = 300;
+
+ 
+  tcEdit = loginForm.AddNewProEdit(loginForm, 'tcEdit', 'T.C. Kimlik No');
+
+  tcEdit.Margins.Bottom = 332;
+  tcEdit.StyledSettings = ssFamily;
+
+  
+  if (loginForm.clWidth < 400){
+  clComponent.SetupComponent(tcEdit,'{"Align" : "Center",
+  "RoundHeight":14,"RoundWidth":14,"BorderColor":"#000000", 
+  "BorderWidth":2,"Width":300, "Height":40}');
+    tcEdit.TextSettings.Font.Size = 22;
+  }
+  else{
+  clComponent.SetupComponent(tcEdit,'{"Align" : "Center",
+  "RoundHeight":27,"RoundWidth":27,"BorderColor":"#000000", 
+  "BorderWidth":2,"Width":594, "Height":66}');
+    tcEdit.TextSettings.Font.Size = 32;
+  }
+  
+  
+  sifreEdit = loginForm.AddNewProEdit(loginForm, 'sifreEdit', 'Şifre');
+  sifreEdit.Margins.Bottom = 130;
+  sifreEdit.StyledSettings = ssFamily;
+  
+  if (loginForm.clWidth < 400){
+  clComponent.SetupComponent(sifreEdit,'{"Align" : "Center",
+  "RoundHeight":14,"RoundWidth":14,"BorderColor":"#000000", 
+  "BorderWidth":2,"Width":300, "Height":40}');
+    sifreEdit.TextSettings.Font.Size = 22;
+  }
+  else{
+  clComponent.SetupComponent(sifreEdit,'{"Align" : "Center",
+  "RoundHeight":27,"RoundWidth":27,"BorderColor":"#000000", 
+  "BorderWidth":2,"Width":594, "Height":66}');
+    sifreEdit.TextSettings.Font.Size = 32;
+  }
+
+  onaylamaCkBx = loginForm.AddNewCheckBox(loginForm,'onaylamaCkBx','');
+  onaylamaCkBx.Align = alCenter
+
+  if (loginForm.clWidth < 400){
+    onaylamaCkBx.Margins.Top = 50;
+    onaylamaCkBx.Margins.Right = 160;
+  }
+  else{
+    onaylamaCkBx.Margins.Top = 30;
+    onaylamaCkBx.Margins.Right = 150;
+    onaylamaCkBx.Scale.X = 2; 
+    onaylamaCkBx.Scale.Y = 2; 
+  }
+
+
+  bilgilendirmeLbl = loginForm.AddNewLabel(loginForm,'bilgilendirmeLbl','6698 Sayılı Kanun uyarınca Aydınlatma Metni’ni okudum.');
+  bilgilendirmeLbl.Align = alCenter
+  
+  if (loginForm.clWidth < 400){
+    bilgilendirmeLbl.Margins.Top = 54;
+    bilgilendirmeLbl.Margins.Left = 70;
+    bilgilendirmeLbl.Width = 300;
+    bilgilendirmeLbl.Height = 30;
+    bilgilendirmeLbl.StyledSettings = ssFamily;
+    bilgilendirmeLbl.TextSettings.Font.Size = 10;
+  }
+  else{
+    bilgilendirmeLbl.Margins.Top = 57;
+    bilgilendirmeLbl.Margins.Left = 240;
+    bilgilendirmeLbl.Width = 700;
+    bilgilendirmeLbl.Height = 30;
+    bilgilendirmeLbl.StyledSettings = ssFamily;
+    bilgilendirmeLbl.TextSettings.Font.Size = 20;
+  }
+
+
+  girisBtn = loginForm.AddNewProButton(loginForm,'girisBtn','Giriş');
+  if (loginForm.clWidth < 400){
+  clComponent.SetupComponent(girisBtn,'{"Align" : "Center",
+  "RoundHeight":23,"RoundWidth":23,"BorderColor":"#000000", 
+  "BorderWidth":2,"Width":200, "Height":46, "MarginTop" : 250, "TextSize":20}');
+  }
+  else{
+  clComponent.SetupComponent(girisBtn,'{"Align" : "Center",
+  "RoundHeight":27,"RoundWidth":27,"BorderColor":"#000000", 
+  "BorderWidth":2,"Width":300, "Height":66, "MarginTop" : 250, "TextSize":30}');
+  }
+ 
+
+
+
+
+  kayitBtn = loginForm.AddNewProButton(loginForm,'kayitBtn','Kayıt Ol');
+
+
+
+  if (loginForm.clWidth < 400){
+  clComponent.SetupComponent(kayitBtn,'{"Align" : "Center",
+  "RoundHeight":15,"RoundWidth":15,"BorderColor":"#000000", 
+  "BorderWidth":2,"Width":140, "Height":30, "MarginTop" : 450, "TextSize":17}');
+  }
+  else{
+  clComponent.SetupComponent(kayitBtn,'{"Align" : "Center",
+  "RoundHeight":13,"RoundWidth":13,"BorderColor":"#000000", 
+  "BorderWidth":2,"Width":180, "Height":36, "MarginTop" : 450, "TextSize":23}');
+  }
+
+  kimlikImg = loginForm.AddNewProImage(tcEdit,'kimlikImg'); 
+
+  if (loginForm.clWidth < 400){
+clComponent.SetupComponent(kimlikImg,'{"Align" : "Left","Width":30,"Height":30, 
+  "ImgUrl":"https://talhaceliktas.com/clomosyImgs/identity.png", "ImgFit":"yes", "MarginLeft" : 15}'); 
+  }
+  else{
+clComponent.SetupComponent(kimlikImg,'{"Align" : "Left","Width":50,"Height":50, 
+  "ImgUrl":"https://talhaceliktas.com/clomosyImgs/identity.png", "ImgFit":"yes", "MarginLeft" : 15}'); 
+  }
+
+
+  if (loginForm.clWidth < 400){
+sifreImg = loginForm.AddNewProImage(sifreEdit,'sifreImg'); 
+  clComponent.SetupComponent(sifreImg,'{"Align" : "Left","Width":30,"Height":30, 
+  "ImgUrl":"https://talhaceliktas.com/clomosyImgs/password.png", "ImgFit":"yes", "MarginLeft" : 15}'); 
+  }
+  else{
+sifreImg = loginForm.AddNewProImage(sifreEdit,'sifreImg'); 
+  clComponent.SetupComponent(sifreImg,'{"Align" : "Left","Width":50,"Height":50, 
+  "ImgUrl":"https://talhaceliktas.com/clomosyImgs/password.png", "ImgFit":"yes", "MarginLeft" : 15}'); 
+  }
+
+  
+  
+  
+ 
+ 
+ 
+ 
+ 
+  loginForm.AddNewEvent(girisBtn,tbeOnClick,'mainiCagir');
+  loginForm.AddNewEvent(kayitBtn,tbeOnClick,'kayitMenu');
+  
+
+  
+  
+  loginForm.Run;
+}

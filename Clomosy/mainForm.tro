@@ -1,0 +1,2460 @@
+uses formPropherties;
+
+var
+mainForm:TclForm;
+leftPanel, bankaIsimPanel, bottomPanel:TclProPanel;
+hesaplarBtn, kartlarBtn,paraTransferiBtn, odemelerBtn, kredilerBtn, dovizBtn:TClProButton;
+hesaplarImg, kartlarImg,paraTransferiImg, odemelerImg, kredilerImg, dovizImg:TClProImage;
+bankaIsmiLblim, cikisLbl:TCLLabel;
+exitBtn: TClProButton;
+tcKimlik : String;
+/// Hesaplar Kismi
+bankKartPanel1, bankKartPanel2, hesaplarPanel :TclProPanel;
+vadesizTlLbl1, vadesizTlLbl2, vadesizHesapNoLbl1, vadesizHesapNoLbl2, vadesizIsimLbl1, vadesizIsimLbl2 : TCLLabel;
+ibanLbl1, ibanLbl2, kullanilabilirBankaBakiye1, kullanilabilirBankaBakiye2, kullanilabilirLbl1, kullanilabilirLbl2:TCLLabel;
+dovizBnkLbl1, dovizBnkLbl2, euroBnkLbl1, euroBnkLbl2, dolarBnkLbl1, dolarBnkLbl2, altinBnkLbl1, altinBnkLbl2:TCLLabel;
+sterlinBnkLbl1, sterlinBnkLbl2 : TCLLabel
+bnkAraCizgi1, bnkAraCizgi2 : TclProPanel;
+bankaKartiImg1, bankaKartiImg2 : TClProImage;
+/// Hesaplar Bitis
+/// Kartlar Kismi
+kartlarPanel, krediKartPanel1,krediKartPanel2, krediAraCizgi1, krediAraCizgi2: TclProPanel;
+krediKartiImg1, krediKartiImg2 : TclProImg;
+krediHesapLbl1, krediHesapLbl2, krediHesapNoLbl1, krediHesapNoLbl2, krediIsimLbl1, krediIsimLbl2, kullanilabilirKrediBakiye1, kullanilabilirKrediBakiye2 : TclLabel
+kullanilabilirKrediLbl1, kullanilabilirKrediLbl2, krediBorcBakiye1, krediBorcBakiye2, kullanilabilirBorcLbl1, kullanilabilirBorcLbl2: TclLabel;
+/// Kartlar Bitis
+/// Para-Transfer Kismi
+transferPanel, transferAraCizgi1, transferAraCizgi2: TclProPanel;
+vadesizTlTransferLbl1, vadesizTlTransferLbl2, vadesizHesapNoTranferLbl1, vadesizHesapNoTranferLbl2, ibanAliciLbl: TclLabel;
+kullanilabilirTransferLbl1, kullanilabilirTransferLbl2, kullanilabilirTransferBakiye1, kullanilabilirTransferBakiye2, gonderilecekTutarLbl : TclLabel;
+krediKartiTransferImg1, krediKartiTransferImg2 : TclProImg;
+ibanEdit, gonderilecekEdit : TclProEdit;
+gonderBtn : TClProButton;
+krediKarti1RdBtn, krediKarti2RdBtn : TCLRadioButton;
+/// Para-Transfer Bitis
+/// Odemeler Kismi
+radioPanel1, radioPanel2 : TclProPanel;
+//K-K
+odemelerPanel, odemelerAraCizgi1, odemelerAraCizgi2: TclProPanel;
+krediKartiOdemelerImg1, krediKartiOdemelerImg2: TclProImg;
+krediKartiBaslikLbl1, krediKartiBaslikLbl2, kalanBorcBilgisiOdemeler1,kalanBorcBilgisiOdemeler2, kalanBorcYazisiOdemeler1, kalanBorcYazisiOdemeler2: TclLabel;
+radioGrup1, radioGrup2:TclRadioGroup;
+hangiBnkIleOdenecekLbl: TclLabel;
+//B-K
+bankaKartiOdemelerImg1, bankaKartiOdemelerImg2: TclProImg;
+vadesizTlOdemelerLbl1, vadesizTlOdemelerLbl2, vadesizHesapNoOdemelerLbl1, vadesizHesapNoOdemelerLbl2: TclLabel
+kullanilabilirOdemelerBakiye1, kullanilabilirOdemelerBakiye2, kullanilabilirOdemelerLbl1, kullanilabilirOdemelerLbl2: TclLabel;
+odemelerAraCizgi3, odemelerAraCizgi4 : TclProPanel;
+odenecekTutarEdt: TclProEdit;
+odemeGonderBtn : TClProButton;
+/// Odemeler Bitis
+/// Krediler Kismi
+kredilerPanel : TclProPanel;
+radioPanelKrediler1, radioPanelKrediler2: TclProPanel;
+radioGrupKrediler1, radioGrupKrediler2 : TclRadioGroup;
+bankaKartiKredilerImg1, bankaKartiKredilerImg2, krediKartiKredilerImg1, krediKartiKredilerImg2 : TclProImg;
+vadesizTlKredilerLbl1, vadesizTlKredilerLbl2, vadesizHesapNoKredilerLbl1, vadesizHesapNoKredilerLbl2, krediTutariLbl, faizTutariLbl : TclLabel;
+kullanilabilirKredilerBakiye1, kullanilabilirKredilerBakiye2, kullanilabilirKredilerLbl1, kullanilabilirKredilerLbl2, kullanilabilirLimitKredilerLbl2 : TclLabel;
+krediKartiKredilerLbl1, krediKartiLimitKrediler1, kullanilabilirLimitKredilerLbl1, krediKartiKredilerLbl2, krediKartiLimitKrediler2 : TclLabel;
+kredilerAraCizgi1, kredilerAraCizgi2, kredilerAraCizgi3, kredilerAraCizgi4: TclProPanel;
+krediTutariEdt : TclProEdit;
+krediCekBtn : TClProButton;
+/// Krediler Bitis
+/// Doviz Kismi
+dovizPanel, dovizAraCizgi1, dovizAraCizgi2, dovizAraCizgi3, dovizAraCizgi4 : TclProPanel;
+radioGrupDoviz1: TclRadioGroup;
+bankaKartiDovizImg1, bankaKartiDovizImg2 : TclProImg;
+vadesizTlDovizLbl1, vadesizHesapNoDovizLbl1, kullanilabilirDovizBakiye1, kullanilabilirDovizLbl1 : TclLabel;
+vadesizTlDovizLbl2, vadesizHesapNoDovizLbl2, kullanilabilirDovizBakiye2, kullanilabilirDovizLbl2 : TclLabel; 
+dovizRdBtn1, dovizRdBtn2 : TCLRadioButton;
+
+dovizAlimSatimPanel:TclProPanel;
+radioGrupDoviz: TclRadioGroup;
+dovizAlAdetiEdt, dovizSatAdetiEdt:TclProEdit;
+dovizAlBtn, dovizSatBtn : TClProButton;
+
+altinMikDovizLbl1, dolarMikDovizLbl1, euroMikDovizLbl1, sterlinMikDovizLbl1: TclLabel;
+altinMikDovizLbl2, dolarMikDovizLbl2, euroMikDovizLbl2, sterlinMikDovizLbl2: TclLabel;
+
+Unit1 :TclUnit;
+
+
+
+
+// Prosedurler
+void uygulamaKapat;
+{
+  Unit1 = TclUnit.Create;
+  Unit1.UnitName = 'cikisSorguForm';
+  Unit1.CallerForm = mainForm;
+  Unit1.Run;
+  // mainForm.Close();
+}
+void dovizBilgileriniGuncelle;
+var
+queryDovizGuncelle : String;
+dovizGuncelleJsonQuerysi : TCLJSONQuery;
+clRestDovizGuncelle : TCLRest;
+
+dovizHesapIBAN1, dovizHesapIBAN2, dovizTlBakiye1, dovizTlBakiye2, dovizAltinGram1, dovizAltinGram2, dovizDolarBakiye1, dovizDolarBakiye2 : String;
+dovizEuroBakiye1, dovizEuroBakiye2, dovizSterlinBakiye1, dovizSterlinBakiye2 : String;
+
+{
+    clRestDovizGuncelle=TCLRest.Create; 
+     clRestDovizGuncelle.BaseURL = 'https://clomosy.talhaceliktas.com/api/musteriler/tum-varliklar'; 
+     clRestDovizGuncelle.Accept = 'application/json'; 
+     clRestDovizGuncelle.Method = rmPOST;
+     queryDovizGuncelle = '{"tcKimlik": "' + tcKimlik +'"}';
+     clRestDovizGuncelle.AddBody(queryDovizGuncelle, 'application/json'); 
+     clRestDovizGuncelle.Execute;
+    try
+      dovizGuncelleJsonQuerysi = TCLJSONQuery.Create(nil);  
+      dovizGuncelleJsonQuerysi = Clomosy.ClDataSetFromJSON('[' + clRestDovizGuncelle.Response +']');  
+      with dovizGuncelleJsonQuerysi do
+      {
+        if (Found) 
+        {
+          First; 
+          while (not EOF)  
+          {
+           dovizHesapIBAN1 = FieldByName('iban1').AsString;
+           dovizHesapIBAN2 = FieldByName('iban2').AsString;
+           dovizTlBakiye1 = FieldByName('tlbakiye1').AsString;
+           dovizTlBakiye2 = FieldByName('tlbakiye2').AsString;
+           dovizAltinGram1 = FieldByName('altinGram1').AsString;
+           dovizAltinGram2 = FieldByName('altinGram2').AsString;
+           dovizDolarBakiye1 = FieldByName('dolarUSD1').AsString;
+           dovizDolarBakiye2 = FieldByName('dolarUSD2').AsString;
+           dovizEuroBakiye1 = FieldByName('euroEUR1').AsString;
+           dovizEuroBakiye2 = FieldByName('euroEUR2').AsString;
+           dovizSterlinBakiye1 = FieldByName('sterlinGBP1').AsString;
+           dovizSterlinBakiye2 = FieldByName('sterlinGBP2').AsString;
+
+           Next;
+          }
+          altinMikDovizLbl1.Text = 'Altin: ' + dovizAltinGram1 + 'g';
+          dolarMikDovizLbl1.Text = 'Dolar: ' + dovizDolarBakiye1 + '$';
+          euroMikDovizLbl1.Text = 'Euro: ' + dovizEuroBakiye1 + '€';
+          sterlinMikDovizLbl1.Text = 'Sterlin: ' + dovizSterlinBakiye1 + '£';
+          altinMikDovizLbl2.Text = 'Altin: ' + dovizAltinGram2 + 'g';
+          dolarMikDovizLbl2.Text = 'Dolar: ' + dovizDolarBakiye2 + '$';
+          euroMikDovizLbl2.Text = 'Euro: ' + dovizEuroBakiye2 + '€';
+          sterlinMikDovizLbl2.Text = 'Sterlin: ' + dovizSterlinBakiye2 + '£';
+          vadesizHesapNoDovizLbl1.Text ='IBAN: TR' + dovizHesapIBAN1;
+          vadesizHesapNoDovizLbl2.Text ='IBAN: TR' + dovizHesapIBAN2;
+          kullanilabilirDovizBakiye1.Text = dovizTlBakiye1 + 'TL';
+          kullanilabilirDovizBakiye2.Text = dovizTlBakiye2 + 'TL';
+          
+        }
+        
+      }
+    except
+      
+      ShowMessage('Exception Class: '+LastExceptionClassName+' Exception Message: '+LastExceptionMessage);
+    }
+}
+void dovizAl;
+var
+queryDovizAl : String;
+dovizAlJsonQuerysi : TCLJSONQuery;
+clRestDovizAl : TCLRest;
+secilenKrediKartiDoviz, secilenDovizTuru: Integer
+
+{
+  secilenKrediKartiDoviz = radioGrupDoviz1.ItemIndex + 1;
+  secilenDovizTuru = radioGrupDoviz.ItemIndex + 1;
+    clRestDovizAl=TCLRest.Create; 
+
+     clRestDovizAl.BaseURL = 'https://clomosy.talhaceliktas.com/api/musteriler/satin-al'; 
+     clRestDovizAl.Accept = 'application/json'; 
+     clRestDovizAl.Method = rmPOST;
+    
+     
+     queryDovizAl = '{"TCKimlik": "' + tcKimlik +'", "kart":"' + IntToStr(secilenKrediKartiDoviz) +'","yatirilanTL":"' + dovizAlAdetiEdt.Text +'", "alinanTip":"' + IntToStr(secilenDovizTuru) + '"}';
+
+     clRestDovizAl.AddBody(queryDovizAl, 'application/json'); 
+     clRestDovizAl.Execute;
+     
+    try
+      dovizAlJsonQuerysi = TCLJSONQuery.Create(nil);  
+      dovizAlJsonQuerysi = Clomosy.ClDataSetFromJSON('[' + clRestDovizAl.Response +']');  
+      with dovizAlJsonQuerysi do
+      {
+        if (Found) 
+        {
+          First; 
+          while (not EOF)  
+          {
+           ShowMessage(FieldByName('message').AsString);
+           Next;
+          }
+        }
+        dovizBilgileriniGuncelle();
+      }
+    except
+      
+      ShowMessage('Exception Class: '+LastExceptionClassName+' Exception Message: '+LastExceptionMessage);
+    }
+}
+
+void dovizSat;
+var
+queryDovizSat : String;
+dovizSatJsonQuerysi : TCLJSONQuery;
+clRestDovizSat : TCLRest;
+secilenKrediKartiDoviz, secilenDovizTuru: Integer
+
+{
+  secilenKrediKartiDoviz = radioGrupDoviz1.ItemIndex + 1;
+  secilenDovizTuru = radioGrupDoviz.ItemIndex + 1;
+
+
+    clRestDovizSat=TCLRest.Create; 
+
+     clRestDovizSat.BaseURL = 'https://clomosy.talhaceliktas.com/api/musteriler/sat'; 
+     clRestDovizSat.Accept = 'application/json'; 
+     clRestDovizSat.Method = rmPOST;
+    
+     
+     queryDovizSat = '{"TCKimlik": "' + tcKimlik +'", "kart":"' + IntToStr(secilenKrediKartiDoviz) +'","satilanMiktar":"' + dovizSatAdetiEdt.Text +'", "satilanTip":"' + IntToStr(secilenDovizTuru) + '"}';
+
+     clRestDovizSat.AddBody(queryDovizSat, 'application/json'); 
+     clRestDovizSat.Execute;
+     
+    try
+      dovizSatJsonQuerysi = TCLJSONQuery.Create(nil);  
+      dovizSatJsonQuerysi = Clomosy.ClDataSetFromJSON('[' + clRestDovizSat.Response +']');  
+      with dovizSatJsonQuerysi do
+      {
+        if (Found) 
+        {
+          First; 
+          while (not EOF)  
+          {
+           ShowMessage(FieldByName('message').AsString);
+           Next;
+          }
+        }
+        dovizBilgileriniGuncelle();
+      }
+    except
+      
+      ShowMessage('Exception Class: '+LastExceptionClassName+' Exception Message: '+LastExceptionMessage);
+    }
+}
+
+
+
+
+void dovizForm;
+{
+
+  dovizPanel.Width = 860;
+  dovizPanel.Height = 820;
+  
+  if(mainForm.clWidth < 400){
+    dovizPanel.Width = 320;
+    dovizPanel.Height = 460;
+    dovizPanel.Margins.Bottom = 250
+  }
+  
+  kredilerPanel.Width = 0;
+  kredilerPanel.Width = 0;
+  odemelerPanel.Width = 0;
+  odemelerPanel.Width = 0;
+  transferPanel.Width = 0;
+  transferPanel.Width = 0;
+  kartlarPanel.Width = 0;
+  kartlarPanel.Height = 0;
+  hesaplarPanel.Width = 0;
+  hesaplarPanel.Height = 0;
+  dovizBilgileriniGuncelle();
+}
+
+void alimBasildi;
+{
+  dovizAlimSatimPanel.Visible = True;
+  dovizAlAdetiEdt.Visible = True;
+  dovizSatAdetiEdt.Visible = False;
+  dovizAlBtn.Visible = True;
+  dovizSatBtn.Visible = False;
+}
+
+void satimBasildi;
+{
+  dovizAlimSatimPanel.Visible = True;
+  dovizAlAdetiEdt.Visible = False;
+  dovizSatAdetiEdt.Visible = True;
+  dovizAlBtn.Visible = False;
+  dovizSatBtn.Visible = True;
+}
+
+
+
+
+
+
+
+void kredilerForm
+var
+queryKrediler : String;
+kredilerJsonQuerysi : TCLJSONQuery;
+clRestKrediler : TCLRest;
+
+krediKartLimitKrediler1, krediKartLimitKrediler2, bankaKartiBakiyeKrediler1, bankaKartiBakiyeKrediler2, hesapNoKrediler1, hesapNoKrediler2 : String;
+{
+  kredilerPanel.Width = 1000;
+  kredilerPanel.Width = 700;
+
+  if(mainForm.clWidth < 400){
+    kredilerPanel.Width = 320;
+    kredilerPanel.Height = 460;
+  }
+
+  odemelerPanel.Width = 0;
+  odemelerPanel.Width = 0;
+  transferPanel.Width = 0;
+  transferPanel.Width = 0;
+  kartlarPanel.Width = 0;
+  kartlarPanel.Height = 0;
+  hesaplarPanel.Width = 0;
+  hesaplarPanel.Height = 0;
+  dovizPanel.Height = 0;
+  dovizPanel.Width = 0;
+  
+  
+     clRestKrediler=TCLRest.Create; 
+     // Post 
+    
+     
+     clRestKrediler.BaseURL = 'https://clomosy.talhaceliktas.com/api/musteriler/kredi-ve-banka-limiti-ve-bakiye'; 
+     clRestKrediler.Accept = 'application/json'; 
+     clRestKrediler.Method = rmPOST;
+    
+     
+     queryKrediler = '{"tcKimlik": "' + tcKimlik +'"}';
+
+     clRestKrediler.AddBody(queryKrediler, 'application/json'); 
+     clRestKrediler.Execute;
+     
+    try
+      kredilerJsonQuerysi = TCLJSONQuery.Create(nil);  
+      kredilerJsonQuerysi = Clomosy.ClDataSetFromJSON('[' + clRestKrediler.Response +']');  
+      with kredilerJsonQuerysi do
+      {
+        if (Found) 
+        {
+          First; 
+          while (not EOF)  
+          {
+           krediKartLimitKrediler1 = FieldByName('krediKartLimit1').AsString;
+           krediKartLimitKrediler2 = FieldByName('krediKartLimit2').AsString;
+           hesapNoKrediler1 = FieldByName('bankaIban1').AsString;
+           hesapNoKrediler2 = FieldByName('bankaIban2').AsString;
+           bankaKartiBakiyeKrediler1 = FieldByName('bankaBakiye1').AsString;
+           bankaKartiBakiyeKrediler2 = FieldByName('bankaBakiye2').AsString;
+           Next;
+          }
+          kullanilabilirKredilerBakiye1.Text = bankaKartiBakiyeKrediler1 + 'TL';
+          kullanilabilirKredilerBakiye2.Text = bankaKartiBakiyeKrediler2 + 'TL';
+          krediKartiLimitKrediler1.Text = krediKartLimitKrediler1 + 'TL';
+          krediKartiLimitKrediler2.Text = krediKartLimitKrediler2 + 'TL';
+          vadesizHesapNoKredilerLbl1.Text = 'Hesap No: ' + hesapNoKrediler1;
+          vadesizHesapNoKredilerLbl2.Text = 'Hesap No: ' + hesapNoKrediler2;
+        }
+        
+      }
+    except
+      
+      ShowMessage('Exception Class: '+LastExceptionClassName+' Exception Message: '+LastExceptionMessage);
+    }
+  
+}
+
+
+void KrediCek;
+var
+queryKrediCek : String;
+krediCekJsonQuerysi : TCLJSONQuery;
+clRestKrediCek : TCLRest;
+secilenKrediKartiKrediler, secilenBankaKartiKrediler : Integer
+{
+
+  secilenBankaKartiKrediler = radioGrupKrediler1.ItemIndex + 1;
+  secilenKrediKartiKrediler = radioGrupKrediler2.ItemIndex + 1;
+    clRestKrediCek=TCLRest.Create; 
+     clRestKrediCek.BaseURL = 'https://clomosy.talhaceliktas.com/api/musteriler/kredi-cek'; 
+     clRestKrediCek.Accept = 'application/json'; 
+     clRestKrediCek.Method = rmPOST;
+    
+     
+     queryKrediCek = '{"tcKimlik": "' + tcKimlik +'", "krediKartiSecimi":"' + IntToStr(secilenKrediKartiKrediler) +'","bankaKartiSecimi":"' + IntToStr(secilenBankaKartiKrediler) +'", "cekilecekTutar":"' + krediTutariEdt.Text + '"}';
+
+     clRestKrediCek.AddBody(queryKrediCek, 'application/json'); 
+     clRestKrediCek.Execute;
+     
+    try
+      krediCekJsonQuerysi = TCLJSONQuery.Create(nil);  
+      krediCekJsonQuerysi = Clomosy.ClDataSetFromJSON('[' + clRestKrediCek.Response +']');  
+      with krediCekJsonQuerysi do
+      {
+        if (Found) 
+        {
+          First; 
+          while (not EOF)  
+          {
+           ShowMessage(FieldByName('message').AsString);
+           Next;
+          }
+        }
+        kredilerForm();
+      }
+    except
+      
+      ShowMessage('Exception Class: '+LastExceptionClassName+' Exception Message: '+LastExceptionMessage);
+    }
+}
+
+
+
+void odemelerForm;
+var
+queryOdemeler : String;
+odemelerJsonQuerysi : TCLJSONQuery;
+clRestOdemeler : TCLRest;
+
+
+odemelerKalanBorc1, odemelerKalanBorc2, odemelerIban1, odemelerIban2,  odemelerBnkBakiy1,  odemelerBnkBakiy2 : String;
+
+{
+  odemelerPanel.Height = 700;
+  odemelerPanel.Width = 700;
+  
+  if(mainForm.clWidth < 400){
+    odemelerPanel.Height = 460;
+    odemelerPanel.Width = 320;
+    odemelerPanel.Margins.Bottom = 240;
+  }
+  
+  transferPanel.Width = 0;
+  transferPanel.Width = 0;
+  kartlarPanel.Width = 0;
+  kartlarPanel.Height = 0;
+  hesaplarPanel.Width = 0;
+  hesaplarPanel.Height = 0;
+  kredilerPanel.Width = 0;
+  kredilerPanel.Width = 0;
+  dovizPanel.Height = 0;
+  dovizPanel.Width = 0;
+  
+  
+  
+   clRestOdemeler=TCLRest.Create; 
+     // Post 
+    
+     
+     clRestOdemeler.BaseURL = 'https://clomosy.talhaceliktas.com/api/musteriler/kredi-ve-banka-ozeti'; 
+     clRestOdemeler.Accept = 'application/json'; 
+     clRestOdemeler.Method = rmPOST;
+    
+     
+     queryOdemeler = '{"tcKimlik": "' + tcKimlik +'"}';
+
+     clRestOdemeler.AddBody(queryOdemeler, 'application/json'); 
+     clRestOdemeler.Execute;
+     
+    try
+      odemelerJsonQuerysi = TCLJSONQuery.Create(nil);  
+      odemelerJsonQuerysi = Clomosy.ClDataSetFromJSON('[' + clRestOdemeler.Response +']');  
+      with odemelerJsonQuerysi do
+      {
+        if (Found) 
+        {
+          First; 
+          while (not EOF)  
+          {
+           odemelerKalanBorc1 = FieldByName('borc1').AsString;
+           odemelerKalanBorc2 = FieldByName('borc2').AsString;
+           odemelerIban1 = FieldByName('iban1').AsString;
+           odemelerIban2 = FieldByName('iban2').AsString;
+           odemelerBnkBakiy1 = FieldByName('bakiye1').AsString;
+           odemelerBnkBakiy2 = FieldByName('bakiye2').AsString;
+           Next;
+          }
+          kalanBorcBilgisiOdemeler1.Text = odemelerKalanBorc1 + 'TL';
+          kalanBorcBilgisiOdemeler2.Text = odemelerKalanBorc2 + 'TL';
+          kullanilabilirOdemelerBakiye1.Text = odemelerBnkBakiy1 + 'TL';
+          kullanilabilirOdemelerBakiye2.Text = odemelerBnkBakiy2 + 'TL';
+          vadesizHesapNoOdemelerLbl1.Text = 'IBAN: TR' + odemelerIban1;
+          vadesizHesapNoOdemelerLbl2.Text = 'IBAN: TR' + odemelerIban2;
+        }
+        
+      }
+    except
+      
+      ShowMessage('Exception Class: '+LastExceptionClassName+' Exception Message: '+LastExceptionMessage);
+    }
+  
+  
+}
+
+
+
+void odemeYap;
+var
+secilenKrediKarti, secilenBankaKarti : Integer;
+
+queryOdemeYap : String;
+OdemeYapJsonQuerysi : TCLJSONQuery;
+clRestOdemeYap : TCLRest;
+
+{
+  secilenKrediKarti = radioGrup1.ItemIndex + 1;
+  secilenBankaKarti = radioGrup2.ItemIndex + 1;
+  
+
+    clRestOdemeYap=TCLRest.Create; 
+     clRestOdemeYap.BaseURL = 'https://clomosy.talhaceliktas.com/api/musteriler/kredi-karti-borc-odeme'; 
+     clRestOdemeYap.Accept = 'application/json'; 
+     clRestOdemeYap.Method = rmPOST;
+    
+     
+     queryOdemeYap = '{"tcKimlik": "' + tcKimlik +'", "krediKartiSecimi":"' + IntToStr(secilenKrediKarti) +'","bankaKartiSecimi":"' + IntToStr(secilenBankaKarti) +'", "odemeTutari":"' + odenecekTutarEdt.Text + '"}';
+
+     clRestOdemeYap.AddBody(queryOdemeYap, 'application/json'); 
+     clRestOdemeYap.Execute;
+     
+    try
+      OdemeYapJsonQuerysi = TCLJSONQuery.Create(nil);  
+      OdemeYapJsonQuerysi = Clomosy.ClDataSetFromJSON('[' + clRestOdemeYap.Response +']');  
+      with OdemeYapJsonQuerysi do
+      {
+        if (Found) 
+        {
+          First; 
+          while (not EOF)  
+          {
+           ShowMessage(FieldByName('message').AsString);
+           Next;
+          }
+        }
+        odemelerForm();
+      }
+    except
+      
+      ShowMessage('Exception Class: '+LastExceptionClassName+' Exception Message: '+LastExceptionMessage);
+    }
+
+}
+
+
+void transferForm;
+var
+tranferHesapNo1, tranferHesapNo2, transferKullanilabilirBakiye1, transferKullanilabilirBakiye2: String;
+queryTransfer : String;
+transferJsonQuerysi : TCLJSONQuery;
+clRestTransfer : TCLRest;
+{
+  hesaplarPanel.Width = 0;
+  hesaplarPanel.Height = 0;
+  kredilerPanel.Width = 0;
+  kredilerPanel.Width = 0;
+  kartlarPanel.Width = 0;
+  kartlarPanel.Height = 0;
+  dovizPanel.Height = 0;
+  dovizPanel.Width = 0;
+  transferPanel.Height = 700;
+  transferPanel.Width = 700;
+  
+  if(mainForm.clWidth < 400){
+  transferPanel.Height = 430;
+  transferPanel.Width = 330;
+  transferPanel.Margins.Bottom = 230;
+  }
+  
+
+  odemelerPanel.Width = 0;
+  odemelerPanel.Width = 0;
+  
+    clRestTransfer=TCLRest.Create; 
+     // Post 
+    
+     
+     clRestTransfer.BaseURL = 'https://clomosy.talhaceliktas.com/api/musteriler/kullanici-iban-bakiye'; 
+     clRestTransfer.Accept = 'application/json'; 
+     clRestTransfer.Method = rmPOST;
+    
+     
+     queryTransfer = '{"tcKimlik": "' + tcKimlik +'"}';
+
+     clRestTransfer.AddBody(queryTransfer, 'application/json'); 
+     clRestTransfer.Execute;
+     
+    try
+      transferJsonQuerysi = TCLJSONQuery.Create(nil);  
+      transferJsonQuerysi = Clomosy.ClDataSetFromJSON('[' + clRestTransfer.Response +']');  
+      with transferJsonQuerysi do
+      {
+        if (Found) 
+        {
+          First; 
+          while (not EOF)  
+          {
+            tranferHesapNo1 = FieldByName('iban1').AsString;
+            tranferHesapNo2 = FieldByName('iban2').AsString;
+            transferKullanilabilirBakiye1 =  FieldByName('bakiye1').AsString;
+            transferKullanilabilirBakiye2 =  FieldByName('bakiye2').AsString;
+            Next;
+          }
+          vadesizHesapNoTranferLbl1.Text = 'IBAN: TR' + tranferHesapNo1;
+          kullanilabilirTransferBakiye1.Text = transferKullanilabilirBakiye1 + 'TL';
+          
+          vadesizHesapNoTranferLbl2.Text = 'IBAN: TR' + tranferHesapNo2;
+          kullanilabilirTransferBakiye2.Text = transferKullanilabilirBakiye2 + 'TL';
+        }
+        
+      }
+    except
+      
+      ShowMessage('Exception Class: '+LastExceptionClassName+' Exception Message: '+LastExceptionMessage);
+    }
+  
+}
+
+
+
+
+
+void ibanaGonder;
+var
+gonderenIBAN: String;
+queryTransferAktarim : String;
+TransferAktarimJsonQuerysi : TCLJSONQuery;
+clRestTransferAktarim : TCLRest;
+{
+  if(krediKarti1RdBtn.IsChecked || krediKarti2RdBtn.IsChecked){
+    
+    if(krediKarti1RdBtn.IsChecked){
+      gonderenIBAN = vadesizHesapNoTranferLbl1.Text;
+    }
+    else
+    {
+      gonderenIBAN = vadesizHesapNoTranferLbl2.Text;
+    }
+    Delete(gonderenIBAN,1, 8);
+      clRestTransferAktarim=TCLRest.Create; 
+     // Post 
+    
+     
+     clRestTransferAktarim.BaseURL = 'https://clomosy.talhaceliktas.com/api/musteriler/iban-transfer'; 
+     clRestTransferAktarim.Accept = 'application/json'; 
+     clRestTransferAktarim.Method = rmPOST;
+    
+     
+     queryTransferAktarim = '{"gonderenIBAN": "' + gonderenIBAN +'", "aliciIBAN":"' + ibanEdit.Text +'", "miktar":"' + gonderilecekEdit.Text + '"}';
+
+     clRestTransferAktarim.AddBody(queryTransferAktarim, 'application/json'); 
+     clRestTransferAktarim.Execute;
+     
+    try
+      TransferAktarimJsonQuerysi = TCLJSONQuery.Create(nil);  
+      TransferAktarimJsonQuerysi = Clomosy.ClDataSetFromJSON('[' + clRestTransferAktarim.Response +']');  
+      with TransferAktarimJsonQuerysi do
+      {
+        if (Found) 
+        {
+          First; 
+          while (not EOF)  
+          {
+            ShowMessage(FieldByName('message').AsString);
+            Next;
+          }
+        }
+        transferForm();
+      }
+    except
+      
+      ShowMessage('Exception Class: '+LastExceptionClassName+' Exception Message: '+LastExceptionMessage);
+    }
+  
+    
+  }
+  else
+  {
+    ShowMessage('Lutfen Kart Secimi Yapiniz!');
+  }
+}
+
+
+
+void kartlarForm;
+var
+krediHesapNo1, krediHesapNo2, krediKullanilabilirBakiye1, krediKullanilabilirBakiye2, krediSahipIsim, krediSahipSoyisim: String;
+krediBorcMiktari1,krediBorcMiktari2 : String;
+queryKartlar : String;
+kartlarJsonQuerysi : TCLJSONQuery;
+clRestKartlar : TCLRest;
+{
+  hesaplarPanel.Width = 0;
+  hesaplarPanel.Height = 0;
+  transferPanel.Width = 0;
+  transferPanel.Width = 0;
+  odemelerPanel.Width = 0;
+  odemelerPanel.Width = 0;
+  kredilerPanel.Width = 0;
+  kredilerPanel.Width = 0;
+  dovizPanel.Height = 0;
+  dovizPanel.Width = 0;
+  
+  if (mainForm.clWidth < 400){
+  kartlarPanel.Width = 300;
+  kartlarPanel.Height = 200;
+  }
+  else{
+  kartlarPanel.Width = 800;
+  kartlarPanel.Height = 800;
+  }
+  clRestKartlar=TCLRest.Create; 
+
+     clRestKartlar.BaseURL = 'https://clomosy.talhaceliktas.com/api/musteriler/kredi-bilgileri'; 
+     clRestKartlar.Accept = 'application/json'; 
+     clRestKartlar.Method = rmPOST;
+    
+     
+     queryKartlar = '{"tcKimlik": "' + tcKimlik +'"}';
+
+     clRestKartlar.AddBody(queryKartlar, 'application/json'); 
+     clRestKartlar.Execute;
+     
+    try
+      kartlarJsonQuerysi = TCLJSONQuery.Create(nil);  
+      kartlarJsonQuerysi = Clomosy.ClDataSetFromJSON('[' + clRestKartlar.Response +']');  
+      with kartlarJsonQuerysi do
+      {
+        if (Found) 
+        {
+          First; 
+          while (not EOF)  
+          {
+            krediHesapNo1 = FieldByName('kartID1').AsString;
+            krediHesapNo2 = FieldByName('kartID2').AsString;
+            krediKullanilabilirBakiye1 =  FieldByName('kartLim1').AsString;
+            krediKullanilabilirBakiye2 =  FieldByName('kartLim2').AsString;
+            krediBorcMiktari1 =  FieldByName('borcMik1').AsString;
+            krediBorcMiktari2 =  FieldByName('borcMik2').AsString;
+            krediSahipIsim =  FieldByName('isim').AsString;
+            krediSahipSoyisim =  FieldByName('soyIsim').AsString;
+            Next;
+          }
+            krediIsimLbl1.Text = krediSahipIsim + ' ' + krediSahipSoyisim; 
+            krediIsimLbl2.Text = krediSahipIsim + ' ' + krediSahipSoyisim; 
+            
+            krediHesapNoLbl1.Text = 'Hesap No: ' + krediHesapNo1;
+            krediHesapNoLbl2.Text = 'Hesap No: ' + krediHesapNo2;
+            
+            kullanilabilirKrediBakiye1.Text = krediKullanilabilirBakiye1 + 'TL';
+            kullanilabilirKrediBakiye2.Text = krediKullanilabilirBakiye2 + 'TL';
+            
+            krediBorcBakiye1.Text = krediBorcMiktari1 + 'TL';
+            krediBorcBakiye2.Text = krediBorcMiktari2 + 'TL';
+        }
+      }
+    except
+      
+      ShowMessage('Exception Class: '+LastExceptionClassName+' Exception Message: '+LastExceptionMessage);
+    }
+  
+}
+
+
+
+
+
+void hesaplarForm;
+var
+hesapNo1, hesapNo2, isim, soyIsim, iban1, iban2 : String;
+kullanilabilirBakiyeTutar1, kullanilabilirBakiyeTutar2, dolarMik1, euroMik1, SterlinMik1, altinMik1, dolarMik2, euroMik2, SterlinMik2, altinMik2 : Float;
+
+query : String;
+hesaplarJsonQuerysi : TCLJSONQuery;
+clRestHesaplar : TCLRest;
+{
+  transferPanel.Width = 0;
+  transferPanel.Width = 0;
+  kartlarPanel.Width = 0;
+  kartlarPanel.Height = 0;
+  odemelerPanel.Width = 0;
+  odemelerPanel.Width = 0;
+  kredilerPanel.Width = 0;
+  kredilerPanel.Width = 0;
+  dovizPanel.Height = 0;
+  dovizPanel.Width = 0;
+  
+  if (mainForm.clWidth < 400){
+  hesaplarPanel.Width = 300;
+  hesaplarPanel.Height = 200;
+  }
+  else{
+  hesaplarPanel.Width = 800;
+  hesaplarPanel.Height = 800;
+  }
+    clRestHesaplar=TCLRest.Create; 
+     clRestHesaplar.BaseURL = 'https://clomosy.talhaceliktas.com/api/musteriler/hesap-bilgileri'; 
+     clRestHesaplar.Accept = 'application/json'; 
+     clRestHesaplar.Method = rmPOST;
+    
+     
+     query = '{"tcKimlik": "' + tcKimlik +'"}';
+
+     clRestHesaplar.AddBody(query, 'application/json'); 
+     clRestHesaplar.Execute;
+     
+    try
+      hesaplarJsonQuerysi = TCLJSONQuery.Create(nil);  
+      hesaplarJsonQuerysi = Clomosy.ClDataSetFromJSON('[' + clRestHesaplar.Response +']');  
+      with hesaplarJsonQuerysi do
+      {
+        if (Found) 
+        {
+          First; 
+          while (not EOF)  
+          {
+            isim = FieldByName('isim').AsString;
+            soyIsim = FieldByName('soyIsim').AsString;
+            hesapNo1 = FieldByName('hesapNo1').AsString;
+            iban1 = FieldByName('iban1').AsString;
+            kullanilabilirBakiyeTutar1 = FieldByName('kullanilabilirBakiyeTutar1').AsString;
+            dolarMik1 = FieldByName('dolarMik1').AsString;
+            euroMik1 = FieldByName('euroMik1').AsString;
+            SterlinMik1 = FieldByName('SterlinMik1').AsString;
+            altinMik1 = FieldByName('altinMik1').AsString;
+            hesapNo2 = FieldByName('hesapNo2').AsString;
+            iban2 = FieldByName('iban2').AsString;
+            kullanilabilirBakiyeTutar2 = FieldByName('kullanilabilirBakiyeTutar2').AsString;
+            dolarMik2 = FieldByName('dolarMik2').AsString;
+            euroMik2 = FieldByName('euroMik2').AsString;
+            SterlinMik2 = FieldByName('SterlinMik2').AsString;
+            altinMik2 = FieldByName('altinMik2').AsString;
+            
+            Next;
+          }
+        }
+        vadesizHesapNoLbl1.Text = 'Hesap No: ' + hesapNo1;
+        vadesizHesapNoLbl2.Text = 'Hesap No: ' + hesapNo2;
+        
+        vadesizIsimLbl1.Text = isim + ' ' + soyIsim;
+        vadesizIsimLbl2.Text = isim + ' ' + soyIsim;
+        
+        kullanilabilirBankaBakiye1.Text = kullanilabilirBakiyeTutar1 + 'TL';
+        kullanilabilirBankaBakiye2.Text = kullanilabilirBakiyeTutar2 + 'TL';
+        
+        ibanLbl1.Text = 'IBAN: TR' + iban1;
+        ibanLbl2.Text = 'IBAN: TR' + iban2;
+        euroBnkLbl1.Text = 'Euro: ' + euroMik1 + '€';
+        euroBnkLbl2.Text = 'Euro: ' + euroMik2 + '€';
+        dolarBnkLbl1.Text = 'Dolar: ' + dolarMik1 + '$';
+        dolarBnkLbl2.Text = 'Dolar: ' + dolarMik2 + '$';
+        altinBnkLbl1.Text = 'Altin: ' + altinMik1 + 'g';
+        altinBnkLbl2.Text = 'Altin: ' + altinMik2 + 'g';
+        sterlinBnkLbl1.Text = 'Sterlin: ' + SterlinMik1 + '£';
+        sterlinBnkLbl2.Text = 'Sterlin: ' + SterlinMik2 + '£';
+      }
+    except
+      
+      ShowMessage('Exception Class: '+LastExceptionClassName+' Exception Message: '+LastExceptionMessage);
+    }
+
+
+}
+
+{
+  mainForm = TclForm.Create(Self);
+  mainForm.clSetWindowState(fwsmaximized);
+  mainForm.clsetcaption('Ana Form');
+  TclButton(mainForm.clFindComponent('BtnFormMenu')).Visible = False; 
+  // TclButton(mainForm.clFindComponent('BtnGoBack')).Visible = False; 
+  mainForm.BtnFormMenu.Visible = False;
+  mainForm.FormWaiting.Visible = False;
+  mainForm.addassetfromurl('https://talhaceliktas.com/clomosyImgs/newLoginBG.jpg')
+  mainForm.SetFormBGImage('newLoginBG.jpg');
+  
+  tcKimlik = Clomosy.GlobalVariableString;
+
+
+  if (mainForm.clWidth > 400){
+    leftPanel = mainForm.AddNewProPanel(mainForm,'leftPanel');
+  clComponent.SetupComponent(leftPanel,'{"Align" : "Left",
+  "BackgroundColor":"#D9D9D9", "Width":336}');
+  
+    bankaIsimPanel = mainForm.AddNewProPanel(leftPanel,'bankaIsimPanel');
+      clComponent.SetupComponent(bankaIsimPanel,'{"Align" : "Top","BackgroundColor":"#d9d9d9", 
+  "Height":100}');
+  
+    bankaIsmiLblim = mainForm.AddNewLabel(bankaIsimPanel,'bankaIsmiLblim','ClomoBank');
+  bankaIsmiLblim.Align = alCenter;
+  bankaIsmiLblim.StyledSettings = ssFamily;
+  bankaIsmiLblim.TextSettings.Font.Size = 40;
+  bankaIsmiLblim.Width = 250;
+  bankaIsmiLblim.Height = 50
+  }
+
+  // Butonlar
+  
+  if (mainForm.clWidth < 400){
+    hesaplarBtn = formPropherties.setButtonHesaplarBtnMobile(mainForm,'hesaplarBtn','Hesaplar');
+    kartlarBtn = formPropherties.setButtonKartlarBtnMobile(mainForm,'kartlarBtn','Kartlar');
+    paraTransferiBtn = formPropherties.setButtonParaTransferiBtnMobile(mainForm,'paraTransferiBtn','Para');
+    odemelerBtn = formPropherties.setButtonOdemelerBtnMobile(mainForm,'odemelerBtn','Odeme');
+    kredilerBtn = formPropherties.setButtonKredilerBtnMobile(mainForm,'kredilerBtn','Kredi');
+    dovizBtn = formPropherties.setButtonDovizBtnMobile(mainForm,'dovizBtn','Doviz');
+  }
+  else{
+    hesaplarBtn      = formPropherties.addPCButton(mainForm, leftPanel, 'hesaplarBtn', 'Hesaplar');
+    kartlarBtn       = formPropherties.addPCButton(mainForm, leftPanel, 'kartlarBtn', 'Kartlar');
+    paraTransferiBtn = formPropherties.addPCButton(mainForm, leftPanel, 'paraTransferiBtn', 'Para Transferi');
+    odemelerBtn      = formPropherties.addPCButton(mainForm, leftPanel, 'odemelerBtn', 'Ödemeler');
+    kredilerBtn      = formPropherties.addPCButton(mainForm, leftPanel, 'kredilerBtn', 'Krediler');
+    dovizBtn         = formPropherties.addPCButton(mainForm, leftPanel, 'dovizBtn', 'Döviz & Altın');
+  }
+  
+  if (mainForm.clWidth > 400){
+    hesaplarImg      = formPropherties.addPCImage(mainForm, hesaplarBtn, 'hesaplarImg', 'https://talhaceliktas.com/clomosyImgs/hesaplar.png');
+    kartlarImg       = formPropherties.addPCImage(mainForm, kartlarBtn, 'kartlarImg', 'https://talhaceliktas.com/clomosyImgs/kartlar.png');
+    paraTransferiImg = formPropherties.addPCImage(mainForm, paraTransferiBtn, 'paraTransferiImg', 'https://talhaceliktas.com/clomosyImgs/transfer.png');
+    odemelerImg      = formPropherties.addPCImage(mainForm, odemelerBtn, 'odemelerImg', 'https://talhaceliktas.com/clomosyImgs/odemeler.png');
+    kredilerImg      = formPropherties.addPCImage(mainForm, kredilerBtn, 'kredilerImg', 'https://talhaceliktas.com/clomosyImgs/krediler.png');
+    dovizImg         = formPropherties.addPCImage(mainForm, dovizBtn, 'dovizImg', 'https://talhaceliktas.com/clomosyImgs/doviz.png');
+  }
+
+
+
+  
+  if (mainForm.clWidth > 400){
+  
+  bottomPanel = mainForm.AddNewProPanel(leftPanel, 'bottomPanel');
+  cikisLbl = mainForm.AddNewLabel(bottomPanel,'cikisLbl','Çıkış');
+  exitBtn = mainForm.AddNewProButton(bottomPanel, 'exitBtn', '');
+  
+  clComponent.SetupComponent(bottomPanel,'{"BackgroundColor":"#D9D9D9", "Width":506}');
+  bottomPanel.Align = alMostBottom;
+  
+
+
+  cikisLbl.Align = alCenter;
+  cikisLbl.Margins.Left = 0;
+  cikisLbl.StyledSettings = ssFamily;
+  cikisLbl.TextSettings.Font.Size = 20;
+  cikisLbl.Margins.Left = 53;
+  
+
+  exitBtn.ClProSettings.PictureSource = 'https://talhaceliktas.com/clomosyImgs/cikis.png';
+  exitBtn.Align = alCenter;
+  exitBtn.Width = 60;
+  exitBtn.Height = 60;
+  exitBtn.Margins.Bottom = 100;
+  exitBtn.SetClProSettings(exitBtn.ClProSettings);
+  
+  }
+hesaplarPanel = mainForm.AddNewProPanel(mainForm,'hesaplarPanel');
+  clComponent.SetupComponent(hesaplarPanel,'{"Align" : "Center", "RoundHeight":27,
+  "RoundWidth":27, "Width":300, "Height":200}');
+
+bankKartPanel1 = mainForm.AddNewProPanel(hesaplarPanel,'bankKartPanel1');
+bankKartPanel2 = mainForm.AddNewProPanel(hesaplarPanel,'bankKartPanel2');
+if (mainForm.clWidth < 400){
+
+clComponent.SetupComponent(bankKartPanel1,'{"Align" : "Center",
+"BackgroundColor":"#D9D9D9", "Width":300, "Height":200,"RoundHeight":27,
+"RoundWidth":27, "MarginBottom": 150 }');
+clComponent.SetupComponent(bankKartPanel2,'{"Align" : "Center",
+"BackgroundColor":"#D9D9D9", "Width":300, "Height":200,"RoundHeight":27,
+"RoundWidth":27, "MarginBottom": 600}');
+}
+else{
+clComponent.SetupComponent(bankKartPanel1,'{"Align" : "Center",
+"BackgroundColor":"#D9D9D9", "Width":761, "Height":226,"RoundHeight":27,
+"RoundWidth":27, "MarginBottom": 300 }');
+    
+
+clComponent.SetupComponent(bankKartPanel2,'{"Align" : "Center",
+"BackgroundColor":"#D9D9D9", "Width":761, "Height":226,"RoundHeight":27,
+"RoundWidth":27, "MarginTop": 300}');
+  }
+
+
+  
+  // 1
+    bankaKartiImg1 = formPropherties.addPCImageFreePos(mainForm, bankKartPanel1, 'bankaKartiImg1', 'https://talhaceliktas.com/clomosyImgs/creditCard.png', 22, 12);
+    
+    vadesizTlLbl1 = formPropherties.addPCLabelFreePos(mainForm, bankKartPanel1, 'vadesizTlLbl1', 'Vadesiz TL Hesabı 1', 98, 17, 26);
+    vadesizHesapNoLbl1 = formPropherties.addPCLabelFreePos(mainForm, bankKartPanel1, 'vadesizHesapNoLbl1', 'Hesap No: XXXXXX', 100, 49, 13);
+    vadesizIsimLbl1 = formPropherties.addPCLabelFreePos(mainForm, bankKartPanel1, 'vadesizIsimLbl1', 'Ahmet Tugrul', 100, 69, 13);
+    ibanLbl1 = formPropherties.addPCLabelFreePos(mainForm, bankKartPanel1, 'ibanLbl1', 'TR XX XXXX XXXX XXXX XXXX', 510, 27, 13);
+    kullanilabilirBankaBakiye1 = formPropherties.addPCLabelFreePos(mainForm, bankKartPanel1, 'kullanilabilirBankaBakiye1', '19287.20TL', 118, 156, 24);
+    kullanilabilirLbl1 = formPropherties.addPCLabelCentered(mainForm, kullanilabilirBankaBakiye1, 'kullanilabilirLbl1', 'Kullanılabilir Bakiye');
+    
+    bnkAraCizgi1 = mainForm.AddNewProPanel(bankKartPanel1, 'bnkAraCizgi1');
+    clComponent.SetupComponent(bnkAraCizgi1, '{"Align":"Center","BackgroundColor":"#989191","MarginTop":130,"Height":78,"Width":2}');
+    
+    dovizBnkLbl1 = formPropherties.addPCLabelFreePos(mainForm, bankKartPanel1, 'dovizBnkLbl1', 'Döviz Miktarları', 480, 113, 20);
+    euroBnkLbl1 = formPropherties.addPCLabelFreePos(mainForm, bankKartPanel1, 'euroBnkLbl1', 'Euro: 20€', 450, 149, 16);
+    dolarBnkLbl1 = formPropherties.addPCLabelFreePos(mainForm, bankKartPanel1, 'dolarBnkLbl1', 'Dolar: 15$', 590, 149, 16);
+    altinBnkLbl1 = formPropherties.addPCLabelFreePos(mainForm, bankKartPanel1, 'altinBnkLbl1', 'Altın: 1g', 450, 190, 16);
+    sterlinBnkLbl1 = formPropherties.addPCLabelFreePos(mainForm, bankKartPanel1, 'sterlinBnkLbl1', 'Sterlin: 12£', 590, 190, 16);
+
+  // 2
+    bankaKartiImg2 = formPropherties.addPCImageFreePos(mainForm, bankKartPanel2, 'bankaKartiImg2', 'https://talhaceliktas.com/clomosyImgs/creditCard.png', 22, 12);
+    
+    vadesizTlLbl2 = formPropherties.addPCLabelFreePos(mainForm, bankKartPanel2, 'vadesizTlLbl2', 'Vadesiz TL Hesabı 2', 98, 17, 26);
+    vadesizHesapNoLbl2 = formPropherties.addPCLabelFreePos(mainForm, bankKartPanel2, 'vadesizHesapNoLbl2', 'Hesap No: XXXXXX', 100, 49, 13);
+    vadesizIsimLbl2 = formPropherties.addPCLabelFreePos(mainForm, bankKartPanel2, 'vadesizIsimLbl2', 'Ahmet Tugrul', 100, 69, 13);
+    ibanLbl2 = formPropherties.addPCLabelFreePos(mainForm, bankKartPanel2, 'ibanLbl2', 'TR XX XXXX XXXX XXXX XXXX', 510, 27, 13);
+    kullanilabilirBankaBakiye2 = formPropherties.addPCLabelFreePos(mainForm, bankKartPanel2, 'kullanilabilirBankaBakiye2', '19287.20TL', 128, 156, 24);
+    kullanilabilirLbl2 = formPropherties.addPCLabelCentered(mainForm, kullanilabilirBankaBakiye2, 'kullanilabilirLbl2', 'Kullanılabilir Bakiye');
+    
+    bnkAraCizgi2 = mainForm.AddNewProPanel(bankKartPanel2, 'bnkAraCizgi2');
+    clComponent.SetupComponent(bnkAraCizgi2, '{"Align":"Center","BackgroundColor":"#989291","MarginTop":130,"Height":78,"Width":2}');
+    
+    dovizBnkLbl2 = formPropherties.addPCLabelFreePos(mainForm, bankKartPanel2, 'dovizBnkLbl2', 'Döviz Miktarları', 480, 113, 20);
+    euroBnkLbl2 = formPropherties.addPCLabelFreePos(mainForm, bankKartPanel2, 'euroBnkLbl2', 'Euro: 20€', 450, 149, 16);
+    dolarBnkLbl2 = formPropherties.addPCLabelFreePos(mainForm, bankKartPanel2, 'dolarBnkLbl2', 'Dolar: 15$', 590, 149, 16);
+    altinBnkLbl2 = formPropherties.addPCLabelFreePos(mainForm, bankKartPanel2, 'altinBnkLbl2', 'Altın: 1g', 450, 190, 16);
+    sterlinBnkLbl2 = formPropherties.addPCLabelFreePos(mainForm, bankKartPanel2, 'sterlinBnkLbl2', 'Sterlin: 12£', 590, 190, 16);
+
+
+if (mainForm.clWidth < 400){
+vadesizTlLbl1.TextSettings.Font.Size = 20;
+vadesizHesapNoLbl1.Position.Y = 40;
+vadesizIsimLbl1.Position.Y = 60;
+ibanLbl1.Position.X = bankKartPanel1.Width - 100;
+ibanLbl1.Position.Y = bankKartPanel1.Height - 30;
+ibanLbl1.Width = 100;
+kullanilabilirBankaBakiye1.Position.X = 30;
+kullanilabilirBankaBakiye1.Position.Y = 100;
+kullanilabilirBankaBakiye1.Width = 100;
+kullanilabilirBankaBakiye1.TextSettings.Font.Size = 20;
+kullanilabilirLbl1.Margins.Top = 50;
+kullanilabilirLbl1.Margins.Left = 35;
+kullanilabilirLbl1.Width = 100;
+kullanilabilirLbl1.TextSettings.Font.Size = 12;
+bnkAraCizgi1.Margins.Top = 50;
+bnkAraCizgi1.Height = 50;
+dovizBnkLbl1.TextSettings.Font.Size = 0;
+euroBnkLbl1.Position.X = bankKartPanel1.Width - 140;
+euroBnkLbl1.Position.Y = bankKartPanel1.Height - 100;
+euroBnkLbl1.TextSettings.Font.Size = 9;
+euroBnkLbl1.Width = 100;
+dolarBnkLbl1.Position.X = bankKartPanel1.Width - 70;
+dolarBnkLbl1.Position.Y = bankKartPanel1.Height - 100;
+dolarBnkLbl1.TextSettings.Font.Size = 9;
+dolarBnkLbl1.Width = 100;
+altinBnkLbl1.Position.X = bankKartPanel1.Width - 140;
+altinBnkLbl1.Position.Y = bankKartPanel1.Height - 70;
+altinBnkLbl1.TextSettings.Font.Size = 9;
+altinBnkLbl1.Width = 100;
+sterlinBnkLbl1.Position.X = bankKartPanel2.Width - 70;
+sterlinBnkLbl1.Position.Y = bankKartPanel2.Height - 70;
+sterlinBnkLbl1.TextSettings.Font.Size = 9;
+sterlinBnkLbl1.Width = 100;
+
+vadesizTlLbl2.TextSettings.Font.Size = 20;
+vadesizHesapNoLbl2.Position.Y = 40;
+vadesizIsimLbl2.Position.Y = 60;
+ibanLbl2.Position.X = bankKartPanel2.Width - 100;
+ibanLbl2.Position.Y = bankKartPanel2.Height - 30;
+ibanLbl2.Width = 100;
+kullanilabilirBankaBakiye2.Position.X = 30;
+kullanilabilirBankaBakiye2.Position.Y = 100;
+kullanilabilirBankaBakiye2.Width = 100;
+kullanilabilirBankaBakiye2.TextSettings.Font.Size = 20;
+kullanilabilirLbl2.Margins.Top = 50;
+kullanilabilirLbl2.Margins.Left = 35;
+kullanilabilirLbl2.Width = 100;
+kullanilabilirLbl2.TextSettings.Font.Size = 12;
+bnkAraCizgi2.Margins.Top = 50;
+bnkAraCizgi2.Height = 50;
+dovizBnkLbl2.TextSettings.Font.Size = 0;
+euroBnkLbl2.Position.X = bankKartPanel2.Width - 140;
+euroBnkLbl2.Position.Y = bankKartPanel2.Height - 100;
+euroBnkLbl2.TextSettings.Font.Size = 9;
+euroBnkLbl2.Width = 100;
+dolarBnkLbl2.Position.X = bankKartPanel2.Width - 70;
+dolarBnkLbl2.Position.Y = bankKartPanel2.Height - 100;
+dolarBnkLbl2.TextSettings.Font.Size = 9;
+dolarBnkLbl2.Width = 100;
+altinBnkLbl2.Position.X = bankKartPanel2.Width - 140;
+altinBnkLbl2.Position.Y = bankKartPanel2.Height - 70;
+altinBnkLbl2.TextSettings.Font.Size = 9;
+altinBnkLbl2.Width = 100;
+sterlinBnkLbl2.Position.X = bankKartPanel2.Width - 70;
+sterlinBnkLbl2.Position.Y = bankKartPanel2.Height - 70;
+sterlinBnkLbl2.TextSettings.Font.Size = 9;
+sterlinBnkLbl2.Width = 100;
+  }
+  // Kredi
+
+  kartlarPanel = mainForm.AddNewProPanel(mainForm,'kartlarPanel');
+  clComponent.SetupComponent(kartlarPanel,'{"Align" : "Center", "RoundHeight":27,
+  "RoundWidth":27, "Width":300, "Height":300}');
+
+
+  krediKartPanel1 = mainForm.AddNewProPanel(kartlarPanel,'krediKartPanel1');
+  krediKartPanel2 = mainForm.AddNewProPanel(kartlarPanel,'krediKartPanel2');
+    if (mainForm.clWidth < 400){
+  clComponent.SetupComponent(krediKartPanel1,'{"Align" : "Center",
+  "BackgroundColor":"#D9D9D9", "Width":300, "Height":200,"RoundHeight":27,
+  "RoundWidth":27, "MarginBottom": 150 }');
+
+  clComponent.SetupComponent(krediKartPanel2,'{"Align" : "Center",
+  "BackgroundColor":"#D9D9D9", "Width":300, "Height":200,"RoundHeight":27,
+  "RoundWidth":27, "MarginBottom": 600}');
+  }else{
+  clComponent.SetupComponent(krediKartPanel1,'{"Align" : "Center",
+  "BackgroundColor":"#D9D9D9", "Width":761, "Height":226,"RoundHeight":27,
+  "RoundWidth":27, "MarginBottom": 300 }');
+  clComponent.SetupComponent(krediKartPanel2,'{"Align" : "Center",
+  "BackgroundColor":"#D9D9D9", "Width":761, "Height":226,"RoundHeight":27,
+  "RoundWidth":27, "MarginTop": 300}');
+  }
+  
+  
+  
+  // 1
+  krediKartiImg1 = mainForm.AddNewProImage(krediKartPanel1,'krediKartiImg1'); 
+  clComponent.SetupComponent(krediKartiImg1,'{"Width":42,"Height":42, 
+  "ImgUrl":"https://talhaceliktas.com/clomosyImgs/creditCard.png", "ImgFit":"yes"}');
+  krediKartiImg1.Align = alNone;
+  krediKartiImg1.Position.X = 22;
+  krediKartiImg1.Position.Y = 12;
+  
+  krediHesapLbl1 = mainForm.AddNewLabel(krediKartPanel1,'krediHesapLbl1','Kredi Kartı 1');
+  krediHesapLbl1.Align = alNone;
+  krediHesapLbl1.Width = 228;
+  krediHesapLbl1.Height = 29;
+  krediHesapLbl1.StyledSettings = ssFamily;
+  krediHesapLbl1.TextSettings.Font.Size = 26;
+  krediHesapLbl1.Position.X = 98;
+  krediHesapLbl1.Position.Y = 17;
+  
+  krediHesapNoLbl1 = mainForm.AddNewLabel(krediKartPanel1,'krediHesapNoLbl1','Hesap No: XXXXXX');
+  krediHesapNoLbl1.Align = alNone;
+  krediHesapNoLbl1.Width = 228;
+  krediHesapNoLbl1.Height = 29;
+  krediHesapNoLbl1.StyledSettings = ssFamily;
+  krediHesapNoLbl1.TextSettings.Font.Size = 13;
+  krediHesapNoLbl1.Position.X = 100;
+  krediHesapNoLbl1.Position.Y = 49;
+  
+  krediIsimLbl1 = mainForm.AddNewLabel(krediKartPanel1,'krediIsimLbl1','Ahmet Tugrul');
+  krediIsimLbl1.Align = alNone;
+  krediIsimLbl1.Width = 228;
+  krediIsimLbl1.Height = 29;
+  krediIsimLbl1.StyledSettings = ssFamily;
+  krediIsimLbl1.TextSettings.Font.Size = 13;
+  krediIsimLbl1.Position.X = 100;
+  krediIsimLbl1.Position.Y = 69;
+  
+  kullanilabilirKrediBakiye1 = mainForm.AddNewLabel(krediKartPanel1,'kullanilabilirKrediBakiye1','19287.20TL');
+  kullanilabilirKrediBakiye1.Align = alNone;
+  kullanilabilirKrediBakiye1.Width = 228;
+  kullanilabilirKrediBakiye1.Height = 29;
+  kullanilabilirKrediBakiye1.StyledSettings = ssFamily;
+  kullanilabilirKrediBakiye1.TextSettings.Font.Size = 24;
+  kullanilabilirKrediBakiye1.Position.X = 118;
+  kullanilabilirKrediBakiye1.Position.Y = 156;
+  kullanilabilirKrediLbl1 = mainForm.AddNewLabel(kullanilabilirKrediBakiye1,'kullanilabilirKrediLbl1','Kullanılabilir Bakiye');
+  kullanilabilirKrediLbl1.Align = alCenter;
+  kullanilabilirKrediLbl1.Width = 228;
+  kullanilabilirKrediLbl1.Height = 29;
+  kullanilabilirKrediLbl1.StyledSettings = ssFamily;
+  kullanilabilirKrediLbl1.TextSettings.Font.Size = 12;
+  kullanilabilirKrediLbl1.Margins.Top = 50;
+  kullanilabilirKrediLbl1.Margins.Left = 12;
+  krediBorcBakiye1 = mainForm.AddNewLabel(krediKartPanel1,'krediBorcBakiye1','2287.25TL');
+  krediBorcBakiye1.Align = alNone;
+  krediBorcBakiye1.Width = 228;
+  krediBorcBakiye1.Height = 29;
+  krediBorcBakiye1.StyledSettings = ssFamily;
+  krediBorcBakiye1.TextSettings.Font.Size = 24;
+  krediBorcBakiye1.Position.X = 500;
+  krediBorcBakiye1.Position.Y = 156;
+  kullanilabilirBorcLbl1 = mainForm.AddNewLabel(krediBorcBakiye1,'kullanilabilirBorcLbl1','Borç Miktarı');
+  kullanilabilirBorcLbl1.Align = alCenter;
+  kullanilabilirBorcLbl1.Width = 228;
+  kullanilabilirBorcLbl1.Height = 29;
+  kullanilabilirBorcLbl1.StyledSettings = ssFamily;
+  kullanilabilirBorcLbl1.TextSettings.Font.Size = 12;
+  kullanilabilirBorcLbl1.Margins.Top = 50;
+  kullanilabilirBorcLbl1.Margins.Left = 12;
+  krediAraCizgi1 = mainForm.AddNewProPanel(krediKartPanel1,'krediAraCizgi1');
+  clComponent.SetupComponent(krediAraCizgi1,'{"Align" : "Center",
+  "BackgroundColor":"#989191", "MarginTop": 130, "Height":78,"Width":2}');
+
+  // 2
+  
+  krediKartiImg2 = mainForm.AddNewProImage(krediKartPanel2,'krediKartiImg2'); 
+  clComponent.SetupComponent(krediKartiImg2,'{"Width":42,"Height":42, 
+  "ImgUrl":"https://talhaceliktas.com/clomosyImgs/creditCard.png", "ImgFit":"yes"}');
+  krediKartiImg2.Align = alNone;
+  krediKartiImg2.Position.X = 22;
+  krediKartiImg2.Position.Y = 12;
+  
+  krediHesapLbl2 = mainForm.AddNewLabel(krediKartPanel2,'krediHesapLbl2','Kredi Kartı 2');
+  krediHesapLbl2.Align = alNone;
+  krediHesapLbl2.Width = 228;
+  krediHesapLbl2.Height = 29;
+  krediHesapLbl2.StyledSettings = ssFamily;
+  krediHesapLbl2.TextSettings.Font.Size = 26;
+  krediHesapLbl2.Position.X = 98;
+  krediHesapLbl2.Position.Y = 17;
+  
+  krediHesapNoLbl2 = mainForm.AddNewLabel(krediKartPanel2,'krediHesapNoLbl2','Hesap No: XXXXXX');
+  krediHesapNoLbl2.Align = alNone;
+  krediHesapNoLbl2.Width = 228;
+  krediHesapNoLbl2.Height = 29;
+  krediHesapNoLbl2.StyledSettings = ssFamily;
+  krediHesapNoLbl2.TextSettings.Font.Size = 13;
+  krediHesapNoLbl2.Position.X = 100;
+  krediHesapNoLbl2.Position.Y = 49;
+  
+  krediIsimLbl2 = mainForm.AddNewLabel(krediKartPanel2,'krediIsimLbl2','Ahmet Tugrul');
+  krediIsimLbl2.Align = alNone;
+  krediIsimLbl2.Width = 228;
+  krediIsimLbl2.Height = 29;
+  krediIsimLbl2.StyledSettings = ssFamily;
+  krediIsimLbl2.TextSettings.Font.Size = 13;
+  krediIsimLbl2.Position.X = 100;
+  krediIsimLbl2.Position.Y = 69;
+  
+  kullanilabilirKrediBakiye2 = mainForm.AddNewLabel(krediKartPanel2,'kullanilabilirKrediBakiye2','19287.20TL');
+  kullanilabilirKrediBakiye2.Align = alNone;
+  kullanilabilirKrediBakiye2.Width = 228;
+  kullanilabilirKrediBakiye2.Height = 29;
+  kullanilabilirKrediBakiye2.StyledSettings = ssFamily;
+  kullanilabilirKrediBakiye2.TextSettings.Font.Size = 24;
+  kullanilabilirKrediBakiye2.Position.X = 118;
+  kullanilabilirKrediBakiye2.Position.Y = 156;
+  
+  kullanilabilirKrediLbl2 = mainForm.AddNewLabel(kullanilabilirKrediBakiye2,'kullanilabilirKrediLbl2','Kullanılabilir Bakiye');
+  kullanilabilirKrediLbl2.Align = alCenter;
+  kullanilabilirKrediLbl2.Width = 228;
+  kullanilabilirKrediLbl2.Height = 29;
+  kullanilabilirKrediLbl2.StyledSettings = ssFamily;
+  kullanilabilirKrediLbl2.TextSettings.Font.Size = 12;
+  kullanilabilirKrediLbl2.Margins.Top = 50;
+  kullanilabilirKrediLbl2.Margins.Left = 12;
+
+  krediBorcBakiye2 = mainForm.AddNewLabel(krediKartPanel2,'krediBorcBakiye2','2287.25TL');
+  krediBorcBakiye2.Align = alNone;
+  krediBorcBakiye2.Width = 228;
+  krediBorcBakiye2.Height = 29;
+  krediBorcBakiye2.StyledSettings = ssFamily;
+  krediBorcBakiye2.TextSettings.Font.Size = 24;
+  krediBorcBakiye2.Position.X = 500;
+  krediBorcBakiye2.Position.Y = 156;
+  
+  kullanilabilirBorcLbl2 = mainForm.AddNewLabel(krediBorcBakiye2,'kullanilabilirBorcLbl2','Borç Miktarı');
+  kullanilabilirBorcLbl2.Align = alCenter;
+  kullanilabilirBorcLbl2.Width = 228;
+  kullanilabilirBorcLbl2.Height = 29;
+  kullanilabilirBorcLbl2.StyledSettings = ssFamily;
+  kullanilabilirBorcLbl2.TextSettings.Font.Size = 12;
+  kullanilabilirBorcLbl2.Margins.Top = 50;
+  kullanilabilirBorcLbl2.Margins.Left = 12;
+
+
+
+  krediAraCizgi2 = mainForm.AddNewProPanel(krediKartPanel2,'krediAraCizgi2');
+  clComponent.SetupComponent(krediAraCizgi2,'{"Align" : "Center",
+  "BackgroundColor":"#989191", "MarginTop": 130, "Height":78,"Width":2}');
+
+  if (mainForm.clWidth < 400){
+  kullanilabilirKrediBakiye1.Position.X = 40;
+  kullanilabilirKrediBakiye1.Position.Y = 110;
+  krediBorcBakiye1.Position.X = krediKartPanel1.Width - 120;
+  krediBorcBakiye1.Position.Y = 110;
+  krediBorcBakiye1.Width = 120;
+  kullanilabilirBorcLbl1.Margins.Top = 50;
+  kullanilabilirBorcLbl1.Margins.Left = 140;
+  krediAraCizgi1.Margins.Left = 17;
+  krediAraCizgi1.Margins.Top = 47;
+  krediAraCizgi1.Height = 50;
+  kullanilabilirKrediBakiye2.Position.X = 40;
+  kullanilabilirKrediBakiye2.Position.Y = 110;
+  krediBorcBakiye2.Position.X = krediKartPanel2.Width - 120;
+  krediBorcBakiye2.Position.Y = 110;
+  krediBorcBakiye2.Width = 120;
+  kullanilabilirBorcLbl2.Margins.Top = 50;
+  kullanilabilirBorcLbl2.Margins.Left = 140;
+  krediAraCizgi2.Margins.Left = 17;
+  krediAraCizgi2.Margins.Top = 47;
+  krediAraCizgi2.Height = 50;
+  }
+ // Transfer
+  transferPanel = mainForm.AddNewProPanel(mainForm,'transferPanel');
+  clComponent.SetupComponent(transferPanel,'{"Align" : "Center",
+  "BackgroundColor":"#D9D9D9", "Width":1000, "Height":700,"RoundHeight":27,
+  "RoundWidth":27}');
+
+ // Kart 1
+ 
+  krediKartiTransferImg1 = mainForm.AddNewProImage(transferPanel,'krediKartiTransferImg1'); 
+  clComponent.SetupComponent(krediKartiTransferImg1,'{"Width":52,"Height":52, 
+  "ImgUrl":"https://talhaceliktas.com/clomosyImgs/creditCard.png", "ImgFit":"yes"}');
+  krediKartiTransferImg1.Align = alNone;
+  krediKartiTransferImg1.Position.X = 145;
+  krediKartiTransferImg1.Position.Y = 55;
+
+
+  vadesizTlTransferLbl1 = mainForm.AddNewLabel(transferPanel,'vadesizTlTransferLbl1','Vadesiz TL Hesabı 1');
+  vadesizTlTransferLbl1.Align = alNone;
+  vadesizTlTransferLbl1.Width = 228;
+  vadesizTlTransferLbl1.Height = 29;
+  vadesizTlTransferLbl1.StyledSettings = ssFamily;
+  vadesizTlTransferLbl1.TextSettings.Font.Size = 26;
+  vadesizTlTransferLbl1.Position.X = 220;
+  vadesizTlTransferLbl1.Position.Y = 45;
+
+  vadesizHesapNoTranferLbl1 = mainForm.AddNewLabel(transferPanel,'vadesizHesapNoTranferLbl1','Hesap No: XXXXXX');
+  vadesizHesapNoTranferLbl1.Align = alNone;
+  vadesizHesapNoTranferLbl1.Width = 228;
+  vadesizHesapNoTranferLbl1.Height = 29;
+  vadesizHesapNoTranferLbl1.StyledSettings = ssFamily;
+  vadesizHesapNoTranferLbl1.TextSettings.Font.Size = 13;
+  vadesizHesapNoTranferLbl1.Position.X = 245;
+  vadesizHesapNoTranferLbl1.Position.Y = 74;
+
+
+  transferAraCizgi1 = mainForm.AddNewProPanel(vadesizTlTransferLbl1,'transferAraCizgi1');
+  clComponent.SetupComponent(transferAraCizgi1,'{"Align" : "Center",
+  "BackgroundColor":"#989191", "MarginLeft": 280, "MarginTop": 10, "Height":78,"Width":2}');
+
+
+  kullanilabilirTransferBakiye1 = mainForm.AddNewLabel(transferAraCizgi1,'kullanilabilirTransferBakiye1','19287.20TL');
+  kullanilabilirTransferBakiye1.Align = alNone;
+  kullanilabilirTransferBakiye1.Width = 228;
+  kullanilabilirTransferBakiye1.Height = 29;
+  kullanilabilirTransferBakiye1.StyledSettings = ssFamily;
+  kullanilabilirTransferBakiye1.TextSettings.Font.Size = 24;
+  kullanilabilirTransferBakiye1.Position.X = 50;
+  kullanilabilirTransferBakiye1.Position.Y = 14;
+
+  kullanilabilirTransferLbl1 = mainForm.AddNewLabel(kullanilabilirTransferBakiye1,'kullanilabilirTransferLbl1','Kullanılabilir Bakiye');
+  kullanilabilirTransferLbl1.Align = alCenter;
+  kullanilabilirTransferLbl1.Width = 228;
+  kullanilabilirTransferLbl1.Height = 29;
+  kullanilabilirTransferLbl1.StyledSettings = ssFamily;
+  kullanilabilirTransferLbl1.TextSettings.Font.Size = 12;
+  kullanilabilirTransferLbl1.Margins.Top = 42;
+
+ // Kart 2
+  
+  krediKartiTransferImg2 = mainForm.AddNewProImage(transferPanel,'krediKartiTransferImg2'); 
+  clComponent.SetupComponent(krediKartiTransferImg2,'{"Width":52,"Height":52, 
+  "ImgUrl":"https://talhaceliktas.com/clomosyImgs/creditCard.png", "ImgFit":"yes"}');
+  krediKartiTransferImg2.Align = alNone;
+  krediKartiTransferImg2.Position.X = 145;
+  krediKartiTransferImg2.Position.Y = 150;
+
+
+  vadesizTlTransferLbl2 = mainForm.AddNewLabel(transferPanel,'vadesizTlTransferLbl2','Vadesiz TL Hesabı 2');
+  vadesizTlTransferLbl2.Align = alNone;
+  vadesizTlTransferLbl2.Width = 228;
+  vadesizTlTransferLbl2.Height = 29;
+  vadesizTlTransferLbl2.StyledSettings = ssFamily;
+  vadesizTlTransferLbl2.TextSettings.Font.Size = 26;
+  vadesizTlTransferLbl2.Position.X = 220;
+  vadesizTlTransferLbl2.Position.Y = 140;
+
+  vadesizHesapNoTranferLbl2 = mainForm.AddNewLabel(transferPanel,'vadesizHesapNoTranferLbl2','Hesap No: XXXXXX');
+  vadesizHesapNoTranferLbl2.Align = alNone;
+  vadesizHesapNoTranferLbl2.Width = 228;
+  vadesizHesapNoTranferLbl2.Height = 29;
+  vadesizHesapNoTranferLbl2.StyledSettings = ssFamily;
+  vadesizHesapNoTranferLbl2.TextSettings.Font.Size = 13;
+  vadesizHesapNoTranferLbl2.Position.X = 245;
+  vadesizHesapNoTranferLbl2.Position.Y = 169;
+
+
+  transferAraCizgi2 = mainForm.AddNewProPanel(vadesizTlTransferLbl2,'transferAraCizgi2');
+  clComponent.SetupComponent(transferAraCizgi2,'{"Align" : "Center",
+  "BackgroundColor":"#989191", "MarginLeft": 280, "MarginTop": 10, "Height":78,"Width":2}');
+
+
+  kullanilabilirTransferBakiye2 = mainForm.AddNewLabel(transferAraCizgi2,'kullanilabilirTransferBakiye2','19287.20TL');
+  kullanilabilirTransferBakiye2.Align = alNone;
+  kullanilabilirTransferBakiye2.Width = 228;
+  kullanilabilirTransferBakiye2.Height = 29;
+  kullanilabilirTransferBakiye2.StyledSettings = ssFamily;
+  kullanilabilirTransferBakiye2.TextSettings.Font.Size = 24;
+  kullanilabilirTransferBakiye2.Position.X = 50;
+  kullanilabilirTransferBakiye2.Position.Y = 14;
+
+  kullanilabilirTransferLbl2 = mainForm.AddNewLabel(kullanilabilirTransferBakiye2,'kullanilabilirTransferLbl2','Kullanılabilir Bakiye');
+  kullanilabilirTransferLbl2.Align = alCenter;
+  kullanilabilirTransferLbl2.Width = 228;
+  kullanilabilirTransferLbl2.Height = 29;
+  kullanilabilirTransferLbl2.StyledSettings = ssFamily;
+  kullanilabilirTransferLbl2.TextSettings.Font.Size = 12;
+  kullanilabilirTransferLbl2.Margins.Top = 42;
+
+  ibanEdit = mainForm.AddNewProEdit(transferPanel, 'ibanEdit', '235411');
+  clComponent.SetupComponent(ibanEdit,'{"Align" : "Center",
+  "RoundHeight":25,"RoundWidth":25,"BorderColor":"#000000", 
+  "BorderWidth":2,"Width":420, "Height":50}');
+  ibanEdit.Margins.Bottom = 110;
+  ibanEdit.StyledSettings = ssFamily;
+  ibanEdit.TextSettings.Font.Size = 24;
+
+  ibanAliciLbl = mainForm.AddNewLabel(ibanEdit,'ibanAliciLbl','Alıcı IBAN:');
+  ibanAliciLbl.Align = alLeft;
+  ibanAliciLbl.Width = 228;
+  ibanAliciLbl.Height = 36;
+  ibanAliciLbl.StyledSettings = ssFamily;
+  ibanAliciLbl.TextSettings.Font.Size = 16;
+  ibanAliciLbl.Margins.Left = 20;
+
+  gonderilecekEdit = mainForm.AddNewProEdit(transferPanel, 'gonderilecekEdit', '3240TL');
+  clComponent.SetupComponent(gonderilecekEdit,'{"Align" : "Center",
+  "RoundHeight":25,"RoundWidth":25,"BorderColor":"#000000", 
+  "BorderWidth":2,"Width":300, "Height":50}');
+  gonderilecekEdit.StyledSettings = ssFamily;
+  gonderilecekEdit.TextSettings.Font.Size = 24;
+  gonderilecekEdit.Margins.Top = 120;
+
+  gonderilecekTutarLbl = mainForm.AddNewLabel(transferPanel,'gonderilecekTutarLbl','Gönderilecek Tutar:');
+  gonderilecekTutarLbl.Width = 228;
+  gonderilecekTutarLbl.Height = 36;
+  gonderilecekTutarLbl.StyledSettings = ssFamily;
+  gonderilecekTutarLbl.TextSettings.Font.Size = 16;
+  gonderilecekTutarLbl.Margins.Right = 100;
+  gonderilecekTutarLbl.Margins.Top = 40;
+
+
+  gonderBtn = mainForm.AddNewProButton(transferPanel,'onaylaBtn','Gönder');
+  clComponent.SetupComponent(gonderBtn,'{"Align" : "Center",
+  "RoundHeight":23,"RoundWidth":23,"BorderColor":"#000000", 
+  "BorderWidth":2,"Width":200, "Height":46, "MarginTop" : 400, "TextSize":30}');
+
+
+
+
+
+  krediKarti1RdBtn = mainForm.AddNewRadioButton(transferPanel,'krediKarti1RdBtn','');
+  krediKarti1RdBtn.Width = 100;
+  krediKarti1RdBtn.Height = 100;
+  krediKarti1RdBtn.Align = alNone
+  krediKarti1RdBtn.Position.X = 100;
+  krediKarti1RdBtn.Position.Y = 33;
+
+
+  krediKarti2RdBtn = mainForm.AddNewRadioButton(transferPanel,'krediKarti2RdBtn','');
+  krediKarti2RdBtn.Width = 100;
+  krediKarti2RdBtn.Height = 100;
+  krediKarti2RdBtn.Align = alNone
+  krediKarti2RdBtn.Position.X = 100;
+  krediKarti2RdBtn.Position.Y = 120;
+
+  mainForm.AddNewEvent(gonderBtn,tbeOnClick,'ibanaGonder');
+
+
+  if(mainForm.clWidth < 400){
+  krediKartiTransferImg1.Width = 0;
+  vadesizTlTransferLbl1.Width =180;
+  vadesizTlTransferLbl1.TextSettings.Font.Size = 19;
+  vadesizTlTransferLbl1.Position.X = 20;
+  vadesizTlTransferLbl1.Position.Y = 20;
+  vadesizHesapNoTranferLbl1.Position.X = 20;
+  vadesizHesapNoTranferLbl1.Position.Y = 40;
+  transferAraCizgi1.Margins.Left = 210;
+  transferAraCizgi1.Height = 40;
+  kullanilabilirTransferBakiye1.Position.X = 10;
+  kullanilabilirTransferBakiye1.Position.Y = -6;
+  
+  krediKartiTransferImg2.Width = 0;
+  vadesizTlTransferLbl2.Width =180;
+  vadesizTlTransferLbl2.TextSettings.Font.Size = 19;
+  vadesizTlTransferLbl2.Position.X = 20;
+  vadesizTlTransferLbl2.Position.Y = 100;
+  vadesizHesapNoTranferLbl2.Position.X = 20;
+  vadesizHesapNoTranferLbl2.Position.Y = 120;
+  transferAraCizgi2.Margins.Left = 210;
+  transferAraCizgi2.Height = 40;
+  kullanilabilirTransferBakiye2.Position.X = 10;
+  kullanilabilirTransferBakiye2.Position.Y = -6;
+  
+  krediKarti2RdBtn.Position.X = -10;
+  krediKarti2RdBtn.Position.Y = 84;
+  
+  krediKarti1RdBtn.Position.X = -10;
+  krediKarti1RdBtn.Position.Y = -3;
+  
+  
+  clComponent.SetupComponent(gonderBtn,'{"RoundHeight":15,"RoundWidth":15,"Width":130, "Height":30, "MarginTop" : 360, "TextSize":20}');
+  
+  clComponent.SetupComponent(ibanEdit,'{"RoundHeight":20,"RoundWidth":20,"Width":230, "Height":40, "MarginBottom": 20}');
+  ibanEdit.TextSettings.Font.Size = 15
+  
+  clComponent.SetupComponent(gonderilecekEdit,'{"RoundHeight":20,"RoundWidth":20,"Width":200, "Height":40, "MarginTop": 150}');
+  gonderilecekEdit.TextSettings.Font.Size = 15;
+  
+  ibanAliciLbl.Align = alCenter;
+  ibanAliciLbl.Margins.Bottom = 60;
+  ibanAliciLbl.Margins.Left = 60;
+  
+  gonderilecekTutarLbl.Margins.Right = 10;
+  gonderilecekTutarLbl.Margins.Top = 85;
+  }
+
+
+  // Odemeler
+
+  odemelerPanel = mainForm.AddNewProPanel(mainForm,'odemelerPanel');
+  clComponent.SetupComponent(odemelerPanel,'{"Align" : "Center",
+  "BackgroundColor":"#D9D9D9", "Width":1000, "Height":700,"RoundHeight":27,
+  "RoundWidth":27}');
+
+
+
+  radioPanel1 = mainForm.AddNewProPanel(odemelerPanel,'radioPanel1');
+  radioPanel1.Align = alNone;
+  radioPanel1.Position.X = 0;
+  radioPanel1.Position.Y = 0;
+  
+
+ // Kredi Kart 1
+
+  krediKartiOdemelerImg1 = mainForm.AddNewProImage(odemelerPanel,'krediKartiOdemelerImg1'); 
+  clComponent.SetupComponent(krediKartiOdemelerImg1,'{"Width":52,"Height":52, 
+  "ImgUrl":"https://talhaceliktas.com/clomosyImgs/creditCard.png", "ImgFit":"yes"}');
+  krediKartiOdemelerImg1.Align = alNone;
+  krediKartiOdemelerImg1.Position.X = 145;
+  krediKartiOdemelerImg1.Position.Y = 35;
+
+
+  krediKartiBaslikLbl1 = mainForm.AddNewLabel(odemelerPanel,'krediKartiBaslikLbl1','Kredi Kartı 1');
+  krediKartiBaslikLbl1.Align = alNone;
+  krediKartiBaslikLbl1.Width = 228;
+  krediKartiBaslikLbl1.Height = 29;
+  krediKartiBaslikLbl1.StyledSettings = ssFamily;
+  krediKartiBaslikLbl1.TextSettings.Font.Size = 26;
+  krediKartiBaslikLbl1.Position.X = 220;
+  krediKartiBaslikLbl1.Position.Y = 45;
+
+
+  odemelerAraCizgi1 = mainForm.AddNewProPanel(krediKartiBaslikLbl1,'odemelerAraCizgi1');
+  clComponent.SetupComponent(odemelerAraCizgi1,'{"Align" : "Center",
+  "BackgroundColor":"#989191", "MarginLeft": 280, "MarginTop": 10, "Height":78,"Width":2}');
+
+
+
+  kalanBorcBilgisiOdemeler1 = mainForm.AddNewLabel(odemelerAraCizgi1,'kalanBorcBilgisiOdemeler1','19287.20TL');
+  kalanBorcBilgisiOdemeler1.Align = alNone;
+  kalanBorcBilgisiOdemeler1.Width = 228;
+  kalanBorcBilgisiOdemeler1.Height = 29;
+  kalanBorcBilgisiOdemeler1.StyledSettings = ssFamily;
+  kalanBorcBilgisiOdemeler1.TextSettings.Font.Size = 24;
+  kalanBorcBilgisiOdemeler1.Position.X = 50;
+  kalanBorcBilgisiOdemeler1.Position.Y = 14;
+
+  kalanBorcYazisiOdemeler1 = mainForm.AddNewLabel(kalanBorcBilgisiOdemeler1,'kalanBorcYazisiOdemeler1','Kalan Borç');
+  kalanBorcYazisiOdemeler1.Align = alCenter;
+  kalanBorcYazisiOdemeler1.Width = 228;
+  kalanBorcYazisiOdemeler1.Height = 29;
+  kalanBorcYazisiOdemeler1.StyledSettings = ssFamily;
+  kalanBorcYazisiOdemeler1.TextSettings.Font.Size = 12;
+  kalanBorcYazisiOdemeler1.Margins.Top = 42;
+
+
+
+
+// Kredi Karti 2
+  
+  krediKartiOdemelerImg2 = mainForm.AddNewProImage(odemelerPanel,'krediKartiOdemelerImg2'); 
+  clComponent.SetupComponent(krediKartiOdemelerImg2,'{"Width":52,"Height":52, 
+  "ImgUrl":"https://talhaceliktas.com/clomosyImgs/creditCard.png", "ImgFit":"yes"}');
+  krediKartiOdemelerImg2.Align = alNone;
+  krediKartiOdemelerImg2.Position.X = 145;
+  krediKartiOdemelerImg2.Position.Y = 130;
+
+
+  krediKartiBaslikLbl2 = mainForm.AddNewLabel(odemelerPanel,'krediKartiBaslikLbl2','Kredi Kartı 2');
+  krediKartiBaslikLbl2.Align = alNone;
+  krediKartiBaslikLbl2.Width = 228;
+  krediKartiBaslikLbl2.Height = 29;
+  krediKartiBaslikLbl2.StyledSettings = ssFamily;
+  krediKartiBaslikLbl2.TextSettings.Font.Size = 26;
+  krediKartiBaslikLbl2.Position.X = 220;
+  krediKartiBaslikLbl2.Position.Y = 140;
+
+
+  odemelerAraCizgi2 = mainForm.AddNewProPanel(krediKartiBaslikLbl2,'odemelerAraCizgi2');
+  clComponent.SetupComponent(odemelerAraCizgi2,'{"Align" : "Center",
+  "BackgroundColor":"#989191", "MarginLeft": 280, "MarginTop": 10, "Height":78,"Width":2}');
+
+
+  kalanBorcBilgisiOdemeler2 = mainForm.AddNewLabel(odemelerAraCizgi2,'kalanBorcBilgisiOdemeler2','19287.20TL');
+  kalanBorcBilgisiOdemeler2.Align = alNone;
+  kalanBorcBilgisiOdemeler2.Width = 228;
+  kalanBorcBilgisiOdemeler2.Height = 29;
+  kalanBorcBilgisiOdemeler2.StyledSettings = ssFamily;
+  kalanBorcBilgisiOdemeler2.TextSettings.Font.Size = 24;
+  kalanBorcBilgisiOdemeler2.Position.X = 50;
+  kalanBorcBilgisiOdemeler2.Position.Y = 14;
+
+  kalanBorcYazisiOdemeler2 = mainForm.AddNewLabel(kalanBorcBilgisiOdemeler2,'kalanBorcYazisiOdemeler2','Kalan Borç');
+  kalanBorcYazisiOdemeler2.Align = alCenter;
+  kalanBorcYazisiOdemeler2.Width = 228;
+  kalanBorcYazisiOdemeler2.Height = 29;
+  kalanBorcYazisiOdemeler2.StyledSettings = ssFamily;
+  kalanBorcYazisiOdemeler2.TextSettings.Font.Size = 12;
+  kalanBorcYazisiOdemeler2.Margins.Top = 42;
+
+
+  hangiBnkIleOdenecekLbl = mainForm.AddNewLabel(odemelerPanel,'hangiBnkIleOdenecekLbl','Hangi Kart Ile Odenecek');
+  hangiBnkIleOdenecekLbl.Align = alTop;
+  hangiBnkIleOdenecekLbl.Width = 240;
+  hangiBnkIleOdenecekLbl.Height = 29;
+  hangiBnkIleOdenecekLbl.StyledSettings = ssFamily;
+  hangiBnkIleOdenecekLbl.TextSettings.Font.Size = 20;
+  hangiBnkIleOdenecekLbl.Margins.Top = 240;
+  hangiBnkIleOdenecekLbl.Margins.Left = odemelerPanel.Width / 4;
+  
+if(mainForm.clWidth > 400){
+  radioGrup1 = mainForm.AddNewRadioGroup(odemelerPanel,'radioGrup1','Kredi Kartlari');
+  radioGrup1.Items.Add('KrediKarti1');
+  radioGrup1.Items.Add('KrediKarti2');
+  radioGrup1.Width = 100;
+  radioGrup1.Align = alNone;
+  radioGrup1.Position.X = 30;
+  radioGrup1.Position.Y = 50;
+  
+  radioGrup2 = mainForm.AddNewRadioGroup(odemelerPanel,'radioGrup2','Banka Kartlari');
+   radioGrup2.Align = alNone;
+   radioGrup2.Position.X = 30;
+   radioGrup2.Position.Y = 330;
+   radioGrup2.Margins.Left = 30;
+   radioGrup2.Width = 100;
+   radioGrup2.Items.Add('BankaKarti1');
+   radioGrup2.Items.Add('BankaKarti2');
+ }
+  
+
+  
+// Banka Karti 1
+  
+  bankaKartiOdemelerImg1 = mainForm.AddNewProImage(odemelerPanel,'bankaKartiOdemelerImg1'); 
+  clComponent.SetupComponent(bankaKartiOdemelerImg1,'{"Width":52,"Height":52, 
+  "ImgUrl":"https://talhaceliktas.com/clomosyImgs/creditCard.png", "ImgFit":"yes"}');
+  bankaKartiOdemelerImg1.Align = alNone;
+  bankaKartiOdemelerImg1.Position.X = 145;
+  bankaKartiOdemelerImg1.Position.Y = 300;
+
+  radioPanel2 = mainForm.AddNewProPanel(odemelerPanel,'radioPanel2');
+  radioPanel2.Align = alNone;
+  radioPanel2.Position.X = 0;
+  radioPanel2.Position.Y = 0;
+
+  vadesizTlOdemelerLbl1 = mainForm.AddNewLabel(odemelerPanel,'vadesizTlOdemelerLbl1','Vadesiz TL Hesabı 1');
+  vadesizTlOdemelerLbl1.Align = alNone;
+  vadesizTlOdemelerLbl1.Width = 228;
+  vadesizTlOdemelerLbl1.Height = 29;
+  vadesizTlOdemelerLbl1.StyledSettings = ssFamily;
+  vadesizTlOdemelerLbl1.TextSettings.Font.Size = 26;
+  vadesizTlOdemelerLbl1.Position.X = 220;
+  vadesizTlOdemelerLbl1.Position.Y = 300;
+
+  vadesizHesapNoOdemelerLbl1 = mainForm.AddNewLabel(odemelerPanel,'vadesizHesapNoOdemelerLbl1','Hesap No: XXXXXX');
+  vadesizHesapNoOdemelerLbl1.Align = alNone;
+  vadesizHesapNoOdemelerLbl1.Width = 228;
+  vadesizHesapNoOdemelerLbl1.Height = 29;
+  vadesizHesapNoOdemelerLbl1.StyledSettings = ssFamily;
+  vadesizHesapNoOdemelerLbl1.TextSettings.Font.Size = 13;
+  vadesizHesapNoOdemelerLbl1.Position.X = 245;
+  vadesizHesapNoOdemelerLbl1.Position.Y = 330;
+
+
+  odemelerAraCizgi3 = mainForm.AddNewProPanel(vadesizHesapNoOdemelerLbl1,'odemelerAraCizgi3');
+  clComponent.SetupComponent(odemelerAraCizgi3,'{"Align" : "Center",
+  "BackgroundColor":"#989191", "MarginLeft": 240, "MarginBottom": 15, "Height":78,"Width":2}');
+
+
+  kullanilabilirOdemelerBakiye1 = mainForm.AddNewLabel(odemelerAraCizgi3,'kullanilabilirOdemelerBakiye1','19287.20TL');
+  kullanilabilirOdemelerBakiye1.Align = alNone;
+  kullanilabilirOdemelerBakiye1.Width = 228;
+  kullanilabilirOdemelerBakiye1.Height = 29;
+  kullanilabilirOdemelerBakiye1.StyledSettings = ssFamily;
+  kullanilabilirOdemelerBakiye1.TextSettings.Font.Size = 24;
+  kullanilabilirOdemelerBakiye1.Position.X = 50;
+  kullanilabilirOdemelerBakiye1.Position.Y = 0;
+
+  kullanilabilirOdemelerLbl1 = mainForm.AddNewLabel(kullanilabilirOdemelerBakiye1,'kullanilabilirOdemelerLbl1','Kullanılabilir Bakiye');
+  kullanilabilirOdemelerLbl1.Align = alCenter;
+  kullanilabilirOdemelerLbl1.Width = 228;
+  kullanilabilirOdemelerLbl1.Height = 29;
+  kullanilabilirOdemelerLbl1.StyledSettings = ssFamily;
+  kullanilabilirOdemelerLbl1.TextSettings.Font.Size = 12;
+  kullanilabilirOdemelerLbl1.Margins.Top = 38;
+
+// Banka Karti 2
+  
+  bankaKartiOdemelerImg2 = mainForm.AddNewProImage(odemelerPanel,'bankaKartiOdemelerImg2'); 
+  clComponent.SetupComponent(bankaKartiOdemelerImg2,'{"Width":52,"Height":52, 
+  "ImgUrl":"https://talhaceliktas.com/clomosyImgs/creditCard.png", "ImgFit":"yes"}');
+  bankaKartiOdemelerImg2.Align = alNone;
+  bankaKartiOdemelerImg2.Position.X = 145;
+  bankaKartiOdemelerImg2.Position.Y = 395;
+
+
+  vadesizTlOdemelerLbl2 = mainForm.AddNewLabel(odemelerPanel,'vadesizTlOdemelerLbl2','Vadesiz TL Hesabı 2');
+  vadesizTlOdemelerLbl2.Align = alNone;
+  vadesizTlOdemelerLbl2.Width = 228;
+  vadesizTlOdemelerLbl2.Height = 29;
+  vadesizTlOdemelerLbl2.StyledSettings = ssFamily;
+  vadesizTlOdemelerLbl2.TextSettings.Font.Size = 26;
+  vadesizTlOdemelerLbl2.Position.X = 220;
+  vadesizTlOdemelerLbl2.Position.Y = 395;
+
+  vadesizHesapNoOdemelerLbl2 = mainForm.AddNewLabel(odemelerPanel,'vadesizHesapNoOdemelerLbl2','Hesap No: XXXXXX');
+  vadesizHesapNoOdemelerLbl2.Align = alNone;
+  vadesizHesapNoOdemelerLbl2.Width = 228;
+  vadesizHesapNoOdemelerLbl2.Height = 29;
+  vadesizHesapNoOdemelerLbl2.StyledSettings = ssFamily;
+  vadesizHesapNoOdemelerLbl2.TextSettings.Font.Size = 13;
+  vadesizHesapNoOdemelerLbl2.Position.X = 245;
+  vadesizHesapNoOdemelerLbl2.Position.Y = 415;
+
+
+  odemelerAraCizgi4 = mainForm.AddNewProPanel(vadesizHesapNoOdemelerLbl2,'odemelerAraCizgi4');
+  clComponent.SetupComponent(odemelerAraCizgi4,'{"Align" : "Center",
+  "BackgroundColor":"#989191", "MarginLeft": 240, "MarginBottom": 15, "Height":78,"Width":2}');
+
+
+  kullanilabilirOdemelerBakiye2 = mainForm.AddNewLabel(odemelerAraCizgi4,'kullanilabilirOdemelerBakiye2','19287.20TL');
+  kullanilabilirOdemelerBakiye2.Align = alNone;
+  kullanilabilirOdemelerBakiye2.Width = 228;
+  kullanilabilirOdemelerBakiye2.Height = 29;
+  kullanilabilirOdemelerBakiye2.StyledSettings = ssFamily;
+  kullanilabilirOdemelerBakiye2.TextSettings.Font.Size = 24;
+  kullanilabilirOdemelerBakiye2.Position.X = 50;
+  kullanilabilirOdemelerBakiye2.Position.Y = 0;
+
+  kullanilabilirOdemelerLbl2 = mainForm.AddNewLabel(kullanilabilirOdemelerBakiye2,'kullanilabilirOdemelerLbl2','Kullanılabilir Bakiye');
+  kullanilabilirOdemelerLbl2.Align = alCenter;
+  kullanilabilirOdemelerLbl2.Width = 228;
+  kullanilabilirOdemelerLbl2.Height = 29;
+  kullanilabilirOdemelerLbl2.StyledSettings = ssFamily;
+  kullanilabilirOdemelerLbl2.TextSettings.Font.Size = 12;
+  kullanilabilirOdemelerLbl2.Margins.Top = 38;
+
+  
+  odenecekTutarEdt = mainForm.AddNewProEdit(odemelerPanel, 'odenecekTutarEdt', '3240TL');
+  clComponent.SetupComponent(odenecekTutarEdt,'{"Align" : "Center",
+  "RoundHeight":25,"RoundWidth":25,"BorderColor":"#000000", 
+  "BorderWidth":2,"Width":300, "Height":50}');
+  odenecekTutarEdt.StyledSettings = ssFamily;
+  odenecekTutarEdt.TextSettings.Font.Size = 24;
+  odenecekTutarEdt.Margins.Top = 70;
+
+
+  odemeGonderBtn = mainForm.AddNewProButton(odenecekTutarEdt,'odemeGonderBtn','Öde');
+  clComponent.SetupComponent(odemeGonderBtn,'{"Align" : "Center",
+  "RoundHeight":23,"RoundWidth":23,"BorderColor":"#000000", 
+  "BorderWidth":2,"Width":200, "Height":46, "MarginTop" : 230, "TextSize":30}');
+
+  
+  if(mainForm.clWidth < 400){
+  krediKartiOdemelerImg1.Width = 0;
+  krediKartiOdemelerImg2.Width = 0;
+  bankaKartiOdemelerImg1.Width = 0;
+  bankaKartiOdemelerImg2.Width = 0;
+  krediKartiBaslikLbl1.Position.X = 30;
+  krediKartiBaslikLbl1.Position.Y = 30;
+  clComponent.SetupComponent(odemelerAraCizgi1,'{"MarginLeft": 100, "Height":60}');
+  kalanBorcBilgisiOdemeler1.Position.X = 20;
+  kalanBorcBilgisiOdemeler1.Position.Y = 10;
+  krediKartiBaslikLbl2.Position.X = 30;
+  krediKartiBaslikLbl2.Position.Y = 100;
+  clComponent.SetupComponent(odemelerAraCizgi2,'{"MarginLeft": 100, "Height":60}');
+  kalanBorcBilgisiOdemeler2.Position.X = 20;
+  kalanBorcBilgisiOdemeler2.Position.Y = 10;
+  hangiBnkIleOdenecekLbl.TextSettings.Font.Size = 0;
+  vadesizTlOdemelerLbl1.Position.X = 20;
+  vadesizTlOdemelerLbl1.Position.Y = 170;
+  vadesizTlOdemelerLbl1.TextSettings.Font.Size = 16;
+  vadesizHesapNoOdemelerLbl1.Position.X = 24;
+  vadesizHesapNoOdemelerLbl1.Position.Y = 190;
+  clComponent.SetupComponent(odemelerAraCizgi3,'{"MarginLeft": 102, "Height":60}');
+  kullanilabilirOdemelerBakiye1.Position.X = 16;
+  vadesizTlOdemelerLbl2.Position.X = 20;
+  vadesizTlOdemelerLbl2.Position.Y = 240;
+  vadesizTlOdemelerLbl2.TextSettings.Font.Size = 16;
+  vadesizHesapNoOdemelerLbl2.Position.X = 24;
+  vadesizHesapNoOdemelerLbl2.Position.Y = 260;
+  clComponent.SetupComponent(odemelerAraCizgi4,'{"MarginLeft": 102, "Height":60}');
+  kullanilabilirOdemelerBakiye2.Position.X = 16;
+  radioGrup1 = mainForm.AddNewRadioGroup(odemelerPanel,'radioGrup1','');
+  radioGrup1.Items.Add('');
+  radioGrup1.Items.Add('');
+  radioGrup1.Width = 40;
+  radioGrup1.Align = alNone;
+  radioGrup1.Position.X = -20;
+  radioGrup1.Position.Y = 30;
+  radioGrup2 = mainForm.AddNewRadioGroup(odemelerPanel,'radioGrup2','');
+  radioGrup2.Align = alNone;
+  radioGrup2.Position.X = -20;
+  radioGrup2.Position.Y = 185;
+  radioGrup2.Width = 40;
+  radioGrup2.Items.Add('');
+  radioGrup2.Items.Add('');
+  clComponent.SetupComponent(odenecekTutarEdt,'{"RoundHeight":20,"RoundWidth":20,"Width":200, "Height":40, "MarginTop":0, "MarginBottom":40}');
+  odenecekTutarEdt.TextSettings.Font.Size = 18;
+  clComponent.SetupComponent(odemeGonderBtn,'{"RoundHeight":15,"RoundWidth":15, "Width":150, "Height":30, "MarginTop" : 130, "TextSize":20}');
+  }
+  
+  
+  
+  mainForm.AddNewEvent(odemeGonderBtn,tbeOnClick,'odemeYap');
+
+
+  // Krediler
+
+  kredilerPanel = mainForm.AddNewProPanel(mainForm,'kredilerPanel');
+  clComponent.SetupComponent(kredilerPanel,'{"Align" : "Center",
+  "BackgroundColor":"#D9D9D9", "Width":1000, "Height":700,"RoundHeight":27,
+  "RoundWidth":27}');
+
+
+  radioPanelKrediler1 = mainForm.AddNewProPanel(kredilerPanel,'radioPanelKrediler1');
+  radioPanelKrediler1.Align = alNone;
+  radioPanelKrediler1.Position.X = 0;
+  radioPanelKrediler1.Position.Y = 0;
+
+  
+
+
+
+ // Banka Kart 1
+
+  bankaKartiKredilerImg1 = mainForm.AddNewProImage(kredilerPanel,'bankaKartiKredilerImg1'); 
+  clComponent.SetupComponent(bankaKartiKredilerImg1,'{"Width":52,"Height":52, 
+  "ImgUrl":"https://talhaceliktas.com/clomosyImgs/creditCard.png", "ImgFit":"yes"}');
+  bankaKartiKredilerImg1.Align = alNone;
+  bankaKartiKredilerImg1.Position.X = 145;
+  bankaKartiKredilerImg1.Position.Y = 55;
+
+
+  vadesizTlKredilerLbl1 = mainForm.AddNewLabel(kredilerPanel,'vadesizTlKredilerLbl1','Vadesiz TL Hesabı 1');
+  vadesizTlKredilerLbl1.Align = alNone;
+  vadesizTlKredilerLbl1.Width = 228;
+  vadesizTlKredilerLbl1.Height = 29;
+  vadesizTlKredilerLbl1.StyledSettings = ssFamily;
+  vadesizTlKredilerLbl1.TextSettings.Font.Size = 26;
+  vadesizTlKredilerLbl1.Position.X = 220;
+  vadesizTlKredilerLbl1.Position.Y = 60;
+  
+  vadesizHesapNoKredilerLbl1 = mainForm.AddNewLabel(kredilerPanel,'vadesizHesapNoKredilerLbl1','Hesap No: XXXXXX');
+  vadesizHesapNoKredilerLbl1.Align = alNone;
+  vadesizHesapNoKredilerLbl1.Width = 228;
+  vadesizHesapNoKredilerLbl1.Height = 29;
+  vadesizHesapNoKredilerLbl1.StyledSettings = ssFamily;
+  vadesizHesapNoKredilerLbl1.TextSettings.Font.Size = 13;
+  vadesizHesapNoKredilerLbl1.Position.X = 245;
+  vadesizHesapNoKredilerLbl1.Position.Y = 90;
+
+  kredilerAraCizgi1 = mainForm.AddNewProPanel(vadesizHesapNoKredilerLbl1,'kredilerAraCizgi1');
+  clComponent.SetupComponent(kredilerAraCizgi1,'{"Align" : "Center",
+  "BackgroundColor":"#989191", "MarginLeft": 240, "MarginBottom": 15, "Height":78,"Width":2}');
+
+  kullanilabilirKredilerBakiye1 = mainForm.AddNewLabel(kredilerAraCizgi1,'kullanilabilirKredilerBakiye1','19287.20TL');
+  kullanilabilirKredilerBakiye1.Align = alNone;
+  kullanilabilirKredilerBakiye1.Width = 228;
+  kullanilabilirKredilerBakiye1.Height = 29;
+  kullanilabilirKredilerBakiye1.StyledSettings = ssFamily;
+  kullanilabilirKredilerBakiye1.TextSettings.Font.Size = 24;
+  kullanilabilirKredilerBakiye1.Position.X = 50;
+  kullanilabilirKredilerBakiye1.Position.Y = 0;
+
+  kullanilabilirKredilerLbl1 = mainForm.AddNewLabel(kullanilabilirKredilerBakiye1,'kullanilabilirKredilerLbl1','Kullanılabilir Bakiye');
+  kullanilabilirKredilerLbl1.Align = alCenter;
+  kullanilabilirKredilerLbl1.Width = 228;
+  kullanilabilirKredilerLbl1.Height = 29;
+  kullanilabilirKredilerLbl1.StyledSettings = ssFamily;
+  kullanilabilirKredilerLbl1.TextSettings.Font.Size = 12;
+  kullanilabilirKredilerLbl1.Margins.Top = 38;
+
+// Banka Kart 2
+
+  bankaKartiKredilerImg2 = mainForm.AddNewProImage(kredilerPanel,'bankaKartiKredilerImg2'); 
+  clComponent.SetupComponent(bankaKartiKredilerImg2,'{"Width":52,"Height":52, 
+  "ImgUrl":"https://talhaceliktas.com/clomosyImgs/creditCard.png", "ImgFit":"yes"}');
+  bankaKartiKredilerImg2.Align = alNone;
+  bankaKartiKredilerImg2.Position.X = 145;
+  bankaKartiKredilerImg2.Position.Y = 135;
+
+
+  vadesizTlKredilerLbl2 = mainForm.AddNewLabel(kredilerPanel,'vadesizTlKredilerLbl2','Vadesiz TL Hesabı 2');
+  vadesizTlKredilerLbl2.Align = alNone;
+  vadesizTlKredilerLbl2.Width = 228;
+  vadesizTlKredilerLbl2.Height = 29;
+  vadesizTlKredilerLbl2.StyledSettings = ssFamily;
+  vadesizTlKredilerLbl2.TextSettings.Font.Size = 26;
+  vadesizTlKredilerLbl2.Position.X = 220;
+  vadesizTlKredilerLbl2.Position.Y = 140;
+  
+  vadesizHesapNoKredilerLbl2 = mainForm.AddNewLabel(kredilerPanel,'vadesizHesapNoKredilerLbl2','Hesap No: XXXXXX');
+  vadesizHesapNoKredilerLbl2.Align = alNone;
+  vadesizHesapNoKredilerLbl2.Width = 228;
+  vadesizHesapNoKredilerLbl2.Height = 29;
+  vadesizHesapNoKredilerLbl2.StyledSettings = ssFamily;
+  vadesizHesapNoKredilerLbl2.TextSettings.Font.Size = 13;
+  vadesizHesapNoKredilerLbl2.Position.X = 245;
+  vadesizHesapNoKredilerLbl2.Position.Y = 170;
+
+  kredilerAraCizgi2 = mainForm.AddNewProPanel(vadesizHesapNoKredilerLbl2,'kredilerAraCizgi2');
+  clComponent.SetupComponent(kredilerAraCizgi2,'{"Align" : "Center",
+  "BackgroundColor":"#989191", "MarginLeft": 240, "MarginBottom": 15, "Height":78,"Width":2}');
+
+  kullanilabilirKredilerBakiye2 = mainForm.AddNewLabel(kredilerAraCizgi2,'kullanilabilirKredilerBakiye2','19287.20TL');
+  kullanilabilirKredilerBakiye2.Align = alNone;
+  kullanilabilirKredilerBakiye2.Width = 228;
+  kullanilabilirKredilerBakiye2.Height = 29;
+  kullanilabilirKredilerBakiye2.StyledSettings = ssFamily;
+  kullanilabilirKredilerBakiye2.TextSettings.Font.Size = 24;
+  kullanilabilirKredilerBakiye2.Position.X = 50;
+  kullanilabilirKredilerBakiye2.Position.Y = 0;
+
+  kullanilabilirKredilerLbl2 = mainForm.AddNewLabel(kullanilabilirKredilerBakiye2,'kullanilabilirKredilerLbl2','Kullanılabilir Bakiye');
+  kullanilabilirKredilerLbl2.Align = alCenter;
+  kullanilabilirKredilerLbl2.Width = 228;
+  kullanilabilirKredilerLbl2.Height = 29;
+  kullanilabilirKredilerLbl2.StyledSettings = ssFamily;
+  kullanilabilirKredilerLbl2.TextSettings.Font.Size = 12;
+  kullanilabilirKredilerLbl2.Margins.Top = 38;
+
+
+  krediTutariLbl = mainForm.AddNewLabel(kredilerPanel,'krediTutariLbl','Kac TL Kredi Cekmek Istersiniz');
+  krediTutariLbl.Align = alCenter;
+  krediTutariLbl.Width = 228;
+  krediTutariLbl.Height = 29;
+  krediTutariLbl.StyledSettings = ssFamily;
+  krediTutariLbl.TextSettings.Font.Size = 12;
+  krediTutariLbl.Margins.Bottom = 222;
+
+
+  krediTutariEdt = mainForm.AddNewProEdit(kredilerPanel, 'krediTutariEdt', '3240TL');
+  clComponent.SetupComponent(krediTutariEdt,'{"Align" : "Center",
+  "RoundHeight":25,"RoundWidth":25,"BorderColor":"#000000", 
+  "BorderWidth":2,"Width":300, "Height":50}');
+  krediTutariEdt.StyledSettings = ssFamily;
+  krediTutariEdt.TextSettings.Font.Size = 24;
+  krediTutariEdt.Margins.Bottom = 150;
+
+  faizTutariLbl = mainForm.AddNewLabel(krediTutariEdt,'faizTutariLbl','Faiz Orani %5');
+  faizTutariLbl.Align = alCenter;
+  faizTutariLbl.Width = 80;
+  faizTutariLbl.Height = 29;
+  faizTutariLbl.StyledSettings = ssFamily;
+  faizTutariLbl.TextSettings.Font.Size = 12;
+  faizTutariLbl.Margins.Top = 80;
+
+// Kredi Kart 1
+
+  krediKartiKredilerImg1 = mainForm.AddNewProImage(kredilerPanel,'krediKartiKredilerImg1'); 
+  clComponent.SetupComponent(krediKartiKredilerImg1,'{"Width":52,"Height":52, 
+  "ImgUrl":"https://talhaceliktas.com/clomosyImgs/creditCard.png", "ImgFit":"yes"}');
+  krediKartiKredilerImg1.Align = alNone;
+  krediKartiKredilerImg1.Position.X = 145;
+  krediKartiKredilerImg1.Position.Y = 365;
+
+
+  krediKartiKredilerLbl1 = mainForm.AddNewLabel(kredilerPanel,'krediKartiKredilerLbl1','Kredi Karti 1');
+  krediKartiKredilerLbl1.Align = alNone;
+  krediKartiKredilerLbl1.Width = 228;
+  krediKartiKredilerLbl1.Height = 29;
+  krediKartiKredilerLbl1.StyledSettings = ssFamily;
+  krediKartiKredilerLbl1.TextSettings.Font.Size = 26;
+  krediKartiKredilerLbl1.Position.X = 220;
+  krediKartiKredilerLbl1.Position.Y = 370;
+
+  kredilerAraCizgi3 = mainForm.AddNewProPanel(krediKartiKredilerLbl1,'kredilerAraCizgi3');
+  clComponent.SetupComponent(kredilerAraCizgi3,'{"Align" : "Center",
+  "BackgroundColor":"#989191", "MarginLeft": 240, "MarginTop": 35, "Height":78,"Width":2}');
+
+  krediKartiLimitKrediler1 = mainForm.AddNewLabel(kredilerAraCizgi3,'krediKartiLimitKrediler1','19287.20TL');
+  krediKartiLimitKrediler1.Align = alNone;
+  krediKartiLimitKrediler1.Width = 228;
+  krediKartiLimitKrediler1.Height = 29;
+  krediKartiLimitKrediler1.StyledSettings = ssFamily;
+  krediKartiLimitKrediler1.TextSettings.Font.Size = 24;
+  krediKartiLimitKrediler1.Position.X = 50;
+  krediKartiLimitKrediler1.Position.Y = 0;
+
+  kullanilabilirLimitKredilerLbl1 = mainForm.AddNewLabel(krediKartiLimitKrediler1,'kullanilabilirLimitKredilerLbl1','Kullanılabilir Limit');
+  kullanilabilirLimitKredilerLbl1.Align = alCenter;
+  kullanilabilirLimitKredilerLbl1.Width = 228;
+  kullanilabilirLimitKredilerLbl1.Height = 29;
+  kullanilabilirLimitKredilerLbl1.StyledSettings = ssFamily;
+  kullanilabilirLimitKredilerLbl1.TextSettings.Font.Size = 12;
+  kullanilabilirLimitKredilerLbl1.Margins.Top = 38;
+
+
+// Kredi Kart 2
+
+  krediKartiKredilerImg2 = mainForm.AddNewProImage(kredilerPanel,'krediKartiKredilerImg2'); 
+  clComponent.SetupComponent(krediKartiKredilerImg2,'{"Width":52,"Height":52, 
+  "ImgUrl":"https://talhaceliktas.com/clomosyImgs/creditCard.png", "ImgFit":"yes"}');
+  krediKartiKredilerImg2.Align = alNone;
+  krediKartiKredilerImg2.Position.X = 145;
+  krediKartiKredilerImg2.Position.Y = 465;
+
+
+  krediKartiKredilerLbl2 = mainForm.AddNewLabel(kredilerPanel,'krediKartiKredilerLbl2','Kredi Karti 2');
+  krediKartiKredilerLbl2.Align = alNone;
+  krediKartiKredilerLbl2.Width = 228;
+  krediKartiKredilerLbl2.Height = 29;
+  krediKartiKredilerLbl2.StyledSettings = ssFamily;
+  krediKartiKredilerLbl2.TextSettings.Font.Size = 26;
+  krediKartiKredilerLbl2.Position.X = 220;
+  krediKartiKredilerLbl2.Position.Y = 470;
+
+  kredilerAraCizgi4 = mainForm.AddNewProPanel(krediKartiKredilerLbl2,'kredilerAraCizgi4');
+  clComponent.SetupComponent(kredilerAraCizgi4,'{"Align" : "Center",
+  "BackgroundColor":"#989191", "MarginLeft": 240, "MarginTop": 35, "Height":78,"Width":2}');
+
+  krediKartiLimitKrediler2 = mainForm.AddNewLabel(kredilerAraCizgi4,'krediKartiLimitKrediler2','19287.20TL');
+  krediKartiLimitKrediler2.Align = alNone;
+  krediKartiLimitKrediler2.Width = 228;
+  krediKartiLimitKrediler2.Height = 29;
+  krediKartiLimitKrediler2.StyledSettings = ssFamily;
+  krediKartiLimitKrediler2.TextSettings.Font.Size = 24;
+  krediKartiLimitKrediler2.Position.X = 50;
+  krediKartiLimitKrediler2.Position.Y = 0;
+
+  kullanilabilirLimitKredilerLbl2 = mainForm.AddNewLabel(krediKartiLimitKrediler2,'kullanilabilirLimitKredilerLbl2','Kullanılabilir Limit');
+  kullanilabilirLimitKredilerLbl2.Align = alCenter;
+  kullanilabilirLimitKredilerLbl2.Width = 228;
+  kullanilabilirLimitKredilerLbl2.Height = 29;
+  kullanilabilirLimitKredilerLbl2.StyledSettings = ssFamily;
+  kullanilabilirLimitKredilerLbl2.TextSettings.Font.Size = 12;
+  kullanilabilirLimitKredilerLbl2.Margins.Top = 38;
+
+  if(mainForm.clWidth > 400){
+  radioGrupKrediler1 = mainForm.AddNewRadioGroup(kredilerPanel,'radioGrupKrediler1','Banka Kartlari');
+  radioGrupKrediler1.Items.Add('BankaKarti1');
+  radioGrupKrediler1.Items.Add('BankaKarti1');
+  radioGrupKrediler1.Width = 100;
+  radioGrupKrediler1.Align = alNone;
+  radioGrupKrediler1.Position.X = 30;
+  radioGrupKrediler1.Position.Y = 75;
+
+
+  radioGrupKrediler2 = mainForm.AddNewRadioGroup(kredilerPanel,'radioGrupKrediler2','Banka Kartlari');
+  radioGrupKrediler2.Items.Add('KrediKarti1');
+  radioGrupKrediler2.Items.Add('KrediKarti1');
+  radioGrupKrediler2.Width = 100;
+  radioGrupKrediler2.Align = alNone;
+  radioGrupKrediler2.Position.X = 30;
+  radioGrupKrediler2.Position.Y = 375;
+  }
+
+
+  krediCekBtn = mainForm.AddNewProButton(kredilerPanel,'krediCekBtn','Kredi Cek');
+  clComponent.SetupComponent(krediCekBtn,'{"Align" : "Center",
+  "RoundHeight":23,"RoundWidth":23,"BorderColor":"#000000", 
+  "BorderWidth":2,"Width":200, "Height":46, "MarginTop" : 520, "TextSize":30}');
+
+  if(mainForm.clWidth < 400){
+    clComponent.SetupComponent(kredilerPanel,'{"MarginBottom":230}');
+    bankaKartiKredilerImg1.Width = 0;
+    bankaKartiKredilerImg2.Width = 0;
+    krediKartiKredilerImg1.Width = 0;
+    krediKartiKredilerImg2.Width = 0;
+    
+    vadesizTlKredilerLbl1.Position.X = 30;
+    vadesizTlKredilerLbl1.Position.Y = 30;
+    vadesizTlKredilerLbl1.TextSettings.Font.Size = 17;
+    vadesizHesapNoKredilerLbl1.Position.X = 35;
+    vadesizHesapNoKredilerLbl1.Position.Y = 50;
+    
+    clComponent.SetupComponent(kredilerAraCizgi1,'{"MarginLeft": 100, "MarginBottom": 15, "Height":60}');
+    kullanilabilirKredilerBakiye1.Position.X = 23;
+    kullanilabilirKredilerBakiye1.Position.Y = 0;
+    
+    vadesizTlKredilerLbl2.Position.X = 30;
+    vadesizTlKredilerLbl2.Position.Y = 100;
+    vadesizTlKredilerLbl2.TextSettings.Font.Size = 17;
+    vadesizHesapNoKredilerLbl2.Position.X = 35;
+    vadesizHesapNoKredilerLbl2.Position.Y = 120;
+    
+    clComponent.SetupComponent(kredilerAraCizgi2,'{"MarginLeft": 100, "MarginBottom": 15, "Height":60}');
+    kullanilabilirKredilerBakiye2.Position.X = 23;
+    kullanilabilirKredilerBakiye2.Position.Y = 0;
+  
+    krediTutariLbl.TextSettings.Font.Size = 12;
+    krediTutariLbl.Margins.Bottom = 125;
+    krediTutariLbl.Margins.Left = 24;
+  
+    clComponent.SetupComponent(krediTutariEdt,'{"RoundHeight":20,"RoundWidth":20,"Width":200, "Height":40}');
+    krediTutariEdt.TextSettings.Font.Size = 18;
+    krediTutariEdt.Margins.Bottom = 60;
+    faizTutariLbl.Margins.Top = 70;
+  
+    krediKartiKredilerLbl1.Position.X = 30;
+    krediKartiKredilerLbl1.Position.Y = 270;
+    krediKartiKredilerLbl1.TextSettings.Font.Size = 17;
+    
+    clComponent.SetupComponent(kredilerAraCizgi3,'{"MarginLeft": 30, "MarginTop": 20, "Height":60}');
+    
+    krediKartiKredilerLbl2.Position.X = 30;
+    krediKartiKredilerLbl2.Position.Y = 340;
+    krediKartiKredilerLbl2.TextSettings.Font.Size = 17;
+    
+    clComponent.SetupComponent(kredilerAraCizgi4,'{"MarginLeft": 30, "MarginTop": 15, "Height":50}');
+    
+    clComponent.SetupComponent(krediCekBtn,'{"RoundHeight":15,"RoundWidth":15,"Width":150, "Height":30, "MarginTop" : 410, "TextSize":15}');
+
+    radioGrupKrediler1 = mainForm.AddNewRadioGroup(kredilerPanel,'radioGrupKrediler1','');
+    radioGrupKrediler1.Items.Add('');
+    radioGrupKrediler1.Items.Add('');
+    radioGrupKrediler1.Width = 40;
+    radioGrupKrediler1.Align = alNone;
+    radioGrupKrediler1.Position.X = -10;
+    radioGrupKrediler1.Position.Y = 28;
+  
+  
+    radioGrupKrediler2 = mainForm.AddNewRadioGroup(kredilerPanel,'radioGrupKrediler2','');
+    radioGrupKrediler2.Items.Add('');
+    radioGrupKrediler2.Items.Add('');
+    radioGrupKrediler2.Width = 40;
+    radioGrupKrediler2.Align = alNone;
+    radioGrupKrediler2.Position.X = -10;
+    radioGrupKrediler2.Position.Y = 260;
+  }
+
+  mainForm.AddNewEvent(krediCekBtn, tbeOnClick, 'KrediCek');
+
+
+
+// Doviz
+
+  dovizPanel = mainForm.AddNewProPanel(mainForm,'dovizPanel');
+  clComponent.SetupComponent(dovizPanel,'{"Align" : "Center",
+  "BackgroundColor":"#D9D9D9", "Width":860, "Height":820,"RoundHeight":27,
+  "RoundWidth":27}');
+
+  radioGrupDoviz1 = mainForm.AddNewRadioGroup(dovizPanel,'radioGrupDoviz1','Kart Secimi');
+  radioGrupDoviz1.Items.Add('Banka Karti 1');
+  radioGrupDoviz1.Items.Add('Banka Karti 2');
+  radioGrupDoviz1.Width = 100;
+  radioGrupDoviz1.Align = alNone;
+  radioGrupDoviz1.Position.X = 30;
+  radioGrupDoviz1.Position.Y = 235;
+
+ // Banka Kart 1
+
+  bankaKartiDovizImg1 = mainForm.AddNewProImage(dovizPanel,'bankaKartiDovizImg1'); 
+  clComponent.SetupComponent(bankaKartiDovizImg1,'{"Width":52,"Height":52, 
+  "ImgUrl":"https://talhaceliktas.com/clomosyImgs/creditCard.png", "ImgFit":"yes"}');
+  bankaKartiDovizImg1.Align = alNone;
+  bankaKartiDovizImg1.Position.X = 35;
+  bankaKartiDovizImg1.Position.Y = 45;
+
+  vadesizTlDovizLbl1 = mainForm.AddNewLabel(dovizPanel,'vadesizTlDovizLbl1','Vadesiz TL Hesabı 1');
+  vadesizTlDovizLbl1.Align = alNone;
+  vadesizTlDovizLbl1.Width = 228;
+  vadesizTlDovizLbl1.Height = 29;
+  vadesizTlDovizLbl1.StyledSettings = ssFamily;
+  vadesizTlDovizLbl1.TextSettings.Font.Size = 26;
+  vadesizTlDovizLbl1.Position.X = 110;
+  vadesizTlDovizLbl1.Position.Y = 50;
+  
+  vadesizHesapNoDovizLbl1 = mainForm.AddNewLabel(dovizPanel,'vadesizHesapNoDovizLbl1','Hesap No: XXXXXX');
+  vadesizHesapNoDovizLbl1.Align = alNone;
+  vadesizHesapNoDovizLbl1.Width = 228;
+  vadesizHesapNoDovizLbl1.Height = 29;
+  vadesizHesapNoDovizLbl1.StyledSettings = ssFamily;
+  vadesizHesapNoDovizLbl1.TextSettings.Font.Size = 13;
+  vadesizHesapNoDovizLbl1.Position.X = 135;
+  vadesizHesapNoDovizLbl1.Position.Y = 80;
+
+  dovizAraCizgi1 = mainForm.AddNewProPanel(vadesizHesapNoDovizLbl1,'dovizAraCizgi1');
+  clComponent.SetupComponent(dovizAraCizgi1,'{"Align" : "Center",
+  "BackgroundColor":"#989191", "MarginLeft": 230, "MarginBottom": 15, "Height":78,"Width":2}');
+
+  kullanilabilirDovizBakiye1 = mainForm.AddNewLabel(dovizAraCizgi1,'kullanilabilirDovizBakiye1','19287.20TL');
+  kullanilabilirDovizBakiye1.Align = alNone;
+  kullanilabilirDovizBakiye1.Width = 228;
+  kullanilabilirDovizBakiye1.Height = 29;
+  kullanilabilirDovizBakiye1.StyledSettings = ssFamily;
+  kullanilabilirDovizBakiye1.TextSettings.Font.Size = 24;
+  kullanilabilirDovizBakiye1.Position.X = 30;
+  kullanilabilirDovizBakiye1.Position.Y = 15;
+
+  kullanilabilirDovizLbl1 = mainForm.AddNewLabel(kullanilabilirDovizBakiye1,'kullanilabilirDovizLbl1','Kullanılabilir Bakiye');
+  kullanilabilirDovizLbl1.Align = alCenter;
+  kullanilabilirDovizLbl1.Width = 228;
+  kullanilabilirDovizLbl1.Height = 29;
+  kullanilabilirDovizLbl1.StyledSettings = ssFamily;
+  kullanilabilirDovizLbl1.TextSettings.Font.Size = 12;
+  kullanilabilirDovizLbl1.Margins.Top = 38;
+  
+// Banka Kart 2
+
+  bankaKartiDovizImg2 = mainForm.AddNewProImage(dovizPanel,'bankaKartiDovizImg2'); 
+  clComponent.SetupComponent(bankaKartiDovizImg2,'{"Width":52,"Height":52, 
+  "ImgUrl":"https://talhaceliktas.com/clomosyImgs/creditCard.png", "ImgFit":"yes"}');
+  bankaKartiDovizImg2.Align = alNone;
+  bankaKartiDovizImg2.Position.X = 35;
+  bankaKartiDovizImg2.Position.Y = 135;
+
+
+  vadesizTlDovizLbl2 = mainForm.AddNewLabel(dovizPanel,'vadesizTlDovizLbl2','Vadesiz TL Hesabı 2');
+  vadesizTlDovizLbl2.Align = alNone;
+  vadesizTlDovizLbl2.Width = 228;
+  vadesizTlDovizLbl2.Height = 29;
+  vadesizTlDovizLbl2.StyledSettings = ssFamily;
+  vadesizTlDovizLbl2.TextSettings.Font.Size = 26;
+  vadesizTlDovizLbl2.Position.X = 110;
+  vadesizTlDovizLbl2.Position.Y = 140;
+  
+  vadesizHesapNoDovizLbl2 = mainForm.AddNewLabel(dovizPanel,'vadesizHesapNoDovizLbl2','Hesap No: XXXXXX');
+  vadesizHesapNoDovizLbl2.Align = alNone;
+  vadesizHesapNoDovizLbl2.Width = 228;
+  vadesizHesapNoDovizLbl2.Height = 29;
+  vadesizHesapNoDovizLbl2.StyledSettings = ssFamily;
+  vadesizHesapNoDovizLbl2.TextSettings.Font.Size = 13;
+  vadesizHesapNoDovizLbl2.Position.X = 135;
+  vadesizHesapNoDovizLbl2.Position.Y = 170;
+
+  dovizAraCizgi2 = mainForm.AddNewProPanel(vadesizHesapNoDovizLbl2,'dovizAraCizgi2');
+  clComponent.SetupComponent(dovizAraCizgi2,'{"Align" : "Center",
+  "BackgroundColor":"#989191", "MarginLeft": 230, "MarginBottom": 15, "Height":78,"Width":2}');
+
+  kullanilabilirDovizBakiye2 = mainForm.AddNewLabel(dovizAraCizgi2,'kullanilabilirDovizBakiye2','19287.20TL');
+  kullanilabilirDovizBakiye2.Align = alNone;
+  kullanilabilirDovizBakiye2.Width = 228;
+  kullanilabilirDovizBakiye2.Height = 29;
+  kullanilabilirDovizBakiye2.StyledSettings = ssFamily;
+  kullanilabilirDovizBakiye2.TextSettings.Font.Size = 24;
+  kullanilabilirDovizBakiye2.Position.X = 30;
+  kullanilabilirDovizBakiye2.Position.Y = 15;
+
+  kullanilabilirDovizLbl2 = mainForm.AddNewLabel(kullanilabilirDovizBakiye2,'kullanilabilirDovizLbl2','Kullanılabilir Bakiye');
+  kullanilabilirDovizLbl2.Align = alCenter;
+  kullanilabilirDovizLbl2.Width = 228;
+  kullanilabilirDovizLbl2.Height = 29;
+  kullanilabilirDovizLbl2.StyledSettings = ssFamily;
+  kullanilabilirDovizLbl2.TextSettings.Font.Size = 12;
+  kullanilabilirDovizLbl2.Margins.Top = 38;
+
+
+  dovizAraCizgi3 = mainForm.AddNewProPanel(kullanilabilirDovizBakiye1,'dovizAraCizgi3');
+  clComponent.SetupComponent(dovizAraCizgi3,'{"Align" : "Center",
+  "BackgroundColor":"#989191", "MarginLeft": 70, "MarginTop": 15, "Height":78,"Width":2}');
+
+  dovizAraCizgi4 = mainForm.AddNewProPanel(kullanilabilirDovizBakiye2,'dovizAraCizgi4');
+  clComponent.SetupComponent(dovizAraCizgi4,'{"Align" : "Center",
+  "BackgroundColor":"#989191", "MarginLeft": 70, "MarginTop": 15, "Height":78,"Width":2}');
+
+  // Kart 1 in dovizleri
+  
+  altinMikDovizLbl1 = mainForm.AddNewLabel(dovizAraCizgi3,'altinMikDovizLbl1','Altin: 5g');
+  altinMikDovizLbl1.Align = alCenter;
+  altinMikDovizLbl1.Width = 200;
+  altinMikDovizLbl1.Height = 29;
+  altinMikDovizLbl1.StyledSettings = ssFamily;
+  altinMikDovizLbl1.TextSettings.Font.Size = 16;
+  altinMikDovizLbl1.Margins.Bottom = 30;
+  altinMikDovizLbl1.Margins.Left = 250;
+  
+  dolarMikDovizLbl1 = mainForm.AddNewLabel(dovizAraCizgi3,'dolarMikDovizLbl1','Dolar: 15$');
+  dolarMikDovizLbl1.Align = alCenter;
+  dolarMikDovizLbl1.Width = 200;
+  dolarMikDovizLbl1.Height = 29;
+  dolarMikDovizLbl1.StyledSettings = ssFamily;
+  dolarMikDovizLbl1.TextSettings.Font.Size = 16;
+  dolarMikDovizLbl1.Margins.Bottom = 30;
+  dolarMikDovizLbl1.Margins.Left = 500;
+  
+  euroMikDovizLbl1 = mainForm.AddNewLabel(dovizAraCizgi3,'euroMikDovizLbl1','Euro: 22€');
+  euroMikDovizLbl1.Align = alCenter;
+  euroMikDovizLbl1.Width = 200;
+  euroMikDovizLbl1.Height = 29;
+  euroMikDovizLbl1.StyledSettings = ssFamily;
+  euroMikDovizLbl1.TextSettings.Font.Size = 16;
+  euroMikDovizLbl1.Margins.Top = 30;
+  euroMikDovizLbl1.Margins.Left = 250;
+  
+  sterlinMikDovizLbl1 = mainForm.AddNewLabel(dovizAraCizgi3,'sterlinMikDovizLbl1','Sterlin: 15£');
+  sterlinMikDovizLbl1.Align = alCenter;
+  sterlinMikDovizLbl1.Width = 200;
+  sterlinMikDovizLbl1.Height = 29;
+  sterlinMikDovizLbl1.StyledSettings = ssFamily;
+  sterlinMikDovizLbl1.TextSettings.Font.Size = 16;
+  sterlinMikDovizLbl1.Margins.Top = 30;
+  sterlinMikDovizLbl1.Margins.Left = 500;
+
+
+  // Kart 2 nin dovizleri
+  altinMikDovizLbl2 = mainForm.AddNewLabel(dovizAraCizgi4,'altinMikDovizLbl2','Altin: 5g');
+  altinMikDovizLbl2.Align = alCenter;
+  altinMikDovizLbl2.Width = 200;
+  altinMikDovizLbl2.Height = 29;
+  altinMikDovizLbl2.StyledSettings = ssFamily;
+  altinMikDovizLbl2.TextSettings.Font.Size = 16;
+  altinMikDovizLbl2.Margins.Bottom = 30;
+  altinMikDovizLbl2.Margins.Left = 250;
+  
+  dolarMikDovizLbl2 = mainForm.AddNewLabel(dovizAraCizgi4,'dolarMikDovizLbl2','Dolar: 15$');
+  dolarMikDovizLbl2.Align = alCenter;
+  dolarMikDovizLbl2.Width = 200;
+  dolarMikDovizLbl2.Height = 29;
+  dolarMikDovizLbl2.StyledSettings = ssFamily;
+  dolarMikDovizLbl2.TextSettings.Font.Size = 16;
+  dolarMikDovizLbl2.Margins.Bottom = 30;
+  dolarMikDovizLbl2.Margins.Left = 500;
+  
+  euroMikDovizLbl2 = mainForm.AddNewLabel(dovizAraCizgi4,'euroMikDovizLbl2','Euro: 22€');
+  euroMikDovizLbl2.Align = alCenter;
+  euroMikDovizLbl2.Width = 200;
+  euroMikDovizLbl2.Height = 29;
+  euroMikDovizLbl2.StyledSettings = ssFamily;
+  euroMikDovizLbl2.TextSettings.Font.Size = 16;
+  euroMikDovizLbl2.Margins.Top = 30;
+  euroMikDovizLbl2.Margins.Left = 250;
+  
+  sterlinMikDovizLbl2 = mainForm.AddNewLabel(dovizAraCizgi4,'sterlinMikDovizLbl2','Sterlin: 15£');
+  sterlinMikDovizLbl2.Align = alCenter;
+  sterlinMikDovizLbl2.Width = 200;
+  sterlinMikDovizLbl2.Height = 29;
+  sterlinMikDovizLbl2.StyledSettings = ssFamily;
+  sterlinMikDovizLbl2.TextSettings.Font.Size = 16;
+  sterlinMikDovizLbl2.Margins.Top = 30;
+  sterlinMikDovizLbl2.Margins.Left = 500;
+  
+  dovizRdBtn1 = mainForm.AddNewRadioButton(dovizPanel,'dovizRdBtn1','Al');
+  dovizRdBtn1.Width = 100;
+  dovizRdBtn1.Height = 100;
+  dovizRdBtn1.Align = alCenter
+  dovizRdBtn1.Margins.Top = 180;
+  dovizRdBtn1.Margins.Right = 200;
+  dovizRdBtn1.StyledSettings = ssFamily;
+  dovizRdBtn1.Font.Size = 30;
+  
+  dovizRdBtn2 = mainForm.AddNewRadioButton(dovizPanel,'dovizRdBtn2','Sat');
+  dovizRdBtn2.Width = 100;
+  dovizRdBtn2.Height = 100;
+  dovizRdBtn2.Align = alCenter
+  dovizRdBtn2.Margins.Top = 180;
+  dovizRdBtn2.Margins.Left = 200;
+  dovizRdBtn2.StyledSettings = ssFamily;
+  dovizRdBtn2.Font.Size = 30;
+
+  mainForm.AddNewEvent(dovizRdBtn1,tbeOnClick,'alimBasildi');
+  mainForm.AddNewEvent(dovizRdBtn2,tbeOnClick,'satimBasildi');
+
+  
+  dovizAlimSatimPanel = mainForm.AddNewProPanel(dovizPanel,'dovizAlimSatimPanel');
+  clComponent.SetupComponent(dovizAlimSatimPanel,'{"Align" : "Bottom",
+  "BackgroundColor":"#f0f0f0", "Width":500, "Height":350,"RoundHeight":27,
+  "RoundWidth":27, "MarginBottom":30, "MarginRight":30, "MarginLeft":30}');
+  dovizAlimSatimPanel.Visible = False;
+
+  radioGrupDoviz = mainForm.AddNewRadioGroup(dovizAlimSatimPanel,'radioGrupDoviz','Dovizler');
+  radioGrupDoviz.Items.Add('Altin');
+  radioGrupDoviz.Items.Add('Dolar');
+  radioGrupDoviz.Items.Add('Euro');
+  radioGrupDoviz.Items.Add('Sterlin');
+  radioGrupDoviz.Align = alCenter;
+  radioGrupDoviz.Scale.X = 1.5;
+  radioGrupDoviz.Scale.Y = 1.5;
+
+  dovizAlAdetiEdt = mainForm.AddNewProEdit(dovizAlimSatimPanel, 'dovizAlAdetiEdt', '3240TL');
+  clComponent.SetupComponent(dovizAlAdetiEdt,'{"RoundHeight":20,"RoundWidth":20,"BorderColor":"#000000", 
+  "BorderWidth":1.5,"Width":200, "Height":40, "MarginBottom":240}');
+  dovizAlAdetiEdt.StyledSettings = ssFamily;
+  dovizAlAdetiEdt.TextSettings.Font.Size = 15;
+  dovizAlAdetiEdt.Visible = False;
+  
+  dovizSatAdetiEdt = mainForm.AddNewProEdit(dovizAlimSatimPanel, 'dovizSatAdetiEdt', '45$');
+  clComponent.SetupComponent(dovizSatAdetiEdt,'{"Align" : "Center",
+  "RoundHeight":20,"RoundWidth":20,"BorderColor":"#000000", 
+  "BorderWidth":1.5,"Width":200, "Height":40, "MarginBottom":240}');
+  dovizSatAdetiEdt.StyledSettings = ssFamily;
+  dovizSatAdetiEdt.TextSettings.Font.Size = 15;
+  dovizSatAdetiEdt.Visible = False;
+
+
+  dovizAlBtn = mainForm.AddNewProButton(dovizAlimSatimPanel,'dovizAlBtn','Al');
+  clComponent.SetupComponent(dovizAlBtn,'{"Align" : "Center",
+  "RoundHeight":23,"RoundWidth":23,"BorderColor":"#000000", 
+  "BorderWidth":2,"Width":200, "Height":46, "MarginTop" : 250, "TextSize":30}');
+  dovizAlBtn.Visible = False;
+
+  dovizSatBtn = mainForm.AddNewProButton(dovizAlimSatimPanel,'dovizSatBtn','Sat');
+  clComponent.SetupComponent(dovizSatBtn,'{"Align" : "Center",
+  "RoundHeight":23,"RoundWidth":23,"BorderColor":"#000000", 
+  "BorderWidth":2,"Width":200, "Height":46, "MarginTop" : 250, "TextSize":30}');
+  dovizSatBtn.Visible = False;
+
+
+  if(mainForm.clWidth < 400){
+  bankaKartiDovizImg1.Width = 0
+  bankaKartiDovizImg2.Width = 0
+  dovizAraCizgi1.Width = 0;
+  dovizAraCizgi2.Width = 0
+  
+  vadesizTlDovizLbl1.TextSettings.Font.Size = 0;
+  vadesizHesapNoDovizLbl1.TextSettings.Font.Size = 0;
+  clComponent.SetupComponent(dovizAraCizgi1,'{"Height":0,"Width":0}');
+  kullanilabilirDovizBakiye1.Font.Size = 0;
+
+  vadesizTlDovizLbl2.TextSettings.Font.Size = 0;
+  vadesizHesapNoDovizLbl2.TextSettings.Font.Size = 0;
+  clComponent.SetupComponent(dovizAraCizgi3,'{"Height":0,"Width":0}');
+  clComponent.SetupComponent(dovizAraCizgi2,'{"Height":0,"Width":0}');
+  clComponent.SetupComponent(dovizAraCizgi4,'{"Height":0,"Width":0}');
+  kullanilabilirDovizBakiye2.Position.X = 10;
+  kullanilabilirDovizBakiye2.Position.Y = -5;
+  
+  
+  clComponent.SetupComponent(dovizAlimSatimPanel,'{"Width":300, "Height":200}');
+  radioGrupDoviz.Scale.X = 1.0;
+  radioGrupDoviz.Scale.Y = 1.0;
+  
+  dovizRdBtn1.Margins.Top = 80;
+  dovizRdBtn2.Margins.Top = 80;
+  
+  clComponent.SetupComponent(dovizSatAdetiEdt,'{"RoundHeight":12,"RoundWidth":10,"Width":150, "Height":25, "TextSize":18}');
+  clComponent.SetupComponent(dovizAlAdetiEdt,'{"RoundHeight":12,"RoundWidth":10,"Width":150, "Height":25, "TextSize":18}');
+  
+  clComponent.SetupComponent(dovizAlBtn,'{"RoundHeight":12,"RoundWidth":12,"Width":100, "Height":26,  "TextSize":20,"MarginTop" : 170}');
+  clComponent.SetupComponent(dovizSatBtn,'{"RoundHeight":12,"RoundWidth":12,"Width":100, "Height":26,  "TextSize":20,"MarginTop" : 170}');
+
+
+  radioGrupDoviz1.Position.X = 80;
+  radioGrupDoviz1.Position.Y = 30;
+  radioGrupDoviz1.Width = 170;
+  }
+
+
+
+  mainForm.AddNewEvent(dovizAlBtn,tbeOnClick,'dovizAl');
+  mainForm.AddNewEvent(dovizSatBtn,tbeOnClick,'dovizSat');
+
+  hesaplarForm();
+
+  mainForm.AddNewEvent(hesaplarBtn,tbeOnClick,'hesaplarForm');
+  mainForm.AddNewEvent(kartlarBtn,tbeOnClick,'kartlarForm');
+  mainForm.AddNewEvent(paraTransferiBtn, tbeOnClick, 'transferForm');
+  mainForm.AddNewEvent(odemelerBtn, tbeOnClick, 'odemelerForm');
+  mainForm.AddNewEvent(kredilerBtn, tbeOnClick, 'kredilerForm');
+  mainForm.AddNewEvent(dovizBtn, tbeOnClick, 'dovizForm');
+  
+  if (mainForm.clWidth > 400){
+    mainForm.AddNewEvent(exitBtn, tbeOnClick, 'uygulamaKapat');
+  }
+
+  mainForm.Run;
+}

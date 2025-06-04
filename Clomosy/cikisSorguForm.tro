@@ -1,0 +1,53 @@
+var
+cikisForm:TclForm;
+cikisBtn, iptalBtn : TClProButton;
+cikisLbl: TCLLabel;
+void cikisBasildi;
+{
+
+  CallerForm.Close();
+  cikisForm.Close();
+
+}
+
+void iptalBasildi;
+{
+  cikisForm.Close();
+}
+
+
+{
+cikisForm = TclForm.Create(Self);
+  cikisForm.clsetcaption('Cıkış');
+  TclButton(cikisForm.clFindComponent('BtnFormMenu')).Visible = False; 
+  TclButton(cikisForm.clFindComponent('BtnGoBack')).Visible = False; 
+  cikisForm.BtnFormMenu.Visible = False;
+  cikisForm.FormWaiting.Visible = False;
+  cikisForm.addassetfromurl('https://talhaceliktas.com/clomosyImgs/newLoginBG.jpg')
+  cikisForm.SetFormBGImage('newLoginBG.jpg');
+ 
+  cikisBtn = cikisForm.AddNewProButton(cikisForm,'cikisBtn','Cikis');
+  clComponent.SetupComponent(cikisBtn,'{"Align" : "Center",
+  "RoundHeight":23,"RoundWidth":23,"BorderColor":"#000000", 
+  "BorderWidth":2,"Width":150, "Height":40, "MarginRight" : 250, "TextSize":20}');
+  
+  iptalBtn = cikisForm.AddNewProButton(cikisForm,'iptalBtn','Iptal');
+  clComponent.SetupComponent(iptalBtn,'{"Align" : "Center",
+  "RoundHeight":23,"RoundWidth":23,"BorderColor":"#000000", 
+  "BorderWidth":2,"Width":150, "Height":40, "MarginLeft" : 250, "TextSize":20}');
+  
+  cikisLbl = cikisForm.AddNewLabel(cikisForm,'cikisLbl','Çıkmak istediğinize emin misiniz?');
+  cikisLbl.Width = 300;
+  cikisLbl.Height = 36;
+  cikisLbl.StyledSettings = ssFamily;
+  cikisLbl.TextSettings.Font.Size = 16;
+  cikisLbl.Margins.Bottom = 200;
+  cikisLbl.Margins.Left = 20;
+  
+  
+  cikisForm.AddNewEvent(cikisBtn,tbeOnClick,'cikisBasildi');
+  cikisForm.AddNewEvent(iptalBtn,tbeOnClick,'iptalBasildi');
+  
+  
+  cikisForm.Run;
+}

@@ -1,0 +1,199 @@
+
+
+var
+kayitForm:TclForm;
+kayitLogoPanel:TclProPanel;
+tcEdit, sifreEdit, adEdit, soyadEdit: TClProEdit; 
+bankaIsmiLbl, bilgilendirmeLbl:TCLLabel;
+onaylamaCkBx : TclCheckBox;
+kayitOlBtn :  TClProButton;
+clRest : TCLRest; 
+query : String;
+kayitJsonQuerysi: TCLJSONQuery;
+
+void kullaniciyiKaydet;
+{
+
+  if(onaylamaCkBx.IsChecked == True){
+    
+    clRest=TCLRest.Create; 
+     // Post 
+    
+     
+     clRest.BaseURL = 'https://clomosy.talhaceliktas.com/api/musteriler/yeni-kayit'; 
+     clRest.Accept = 'application/json'; 
+     clRest.Method = rmPOST;
+     
+     /*
+     {
+    "tcKimlik": 12345166351,
+    "sifre": 123456,
+    "ad": "Ahmed",
+    "soyad": "Yurtkaya"
+    }
+    */
+     
+     
+     query = '{"tcKimlik": "' + tcEdit.Text + '","sifre": "' + sifreEdit.Text + '"' + ',"ad": "' + adEdit.Text + '", "soyad": "'+ soyadEdit.Text + '"}';
+
+     clRest.AddBody(query, 'application/json'); 
+     clRest.Execute;
+     
+    try
+      kayitJsonQuerysi = TCLJSONQuery.Create(nil);  
+      kayitJsonQuerysi = Clomosy.ClDataSetFromJSON('[' + clRest.Response +']');  
+      with kayitJsonQuerysi do
+      {
+        if (Found) 
+        {
+          First; 
+          while (not EOF)  
+          {
+            if(FieldByName('message').AsString == 'Kaydınız başarıyla tamamlandı!'){
+                 kayitForm.clHide;
+            }else{
+              ShowMessage(FieldByName('message').AsString);
+            }
+            Break;
+          }
+        }
+      }
+    except
+      
+      ShowMessage('Exception Class: '+LastExceptionClassName+' Exception Message: '+LastExceptionMessage);
+    }
+
+  }
+  else{
+    ShowMessage('Lütfen Sözleşmeyi Onaylayınız!');
+  }
+
+}
+
+
+
+
+
+{
+  kayitForm = TclForm.Create(Self);
+  kayitForm.clSetWindowState(fwsmaximized);
+  kayitForm.clsetcaption('Login ekranı');
+  TclButton(kayitForm.clFindComponent('BtnFormMenu')).Visible = False; 
+  //TclButton(kayitForm.clFindComponent('BtnGoBack')).Visible = False; 
+  kayitForm.BtnFormMenu.Visible = False;
+  kayitForm.FormWaiting.Visible = False;
+  kayitForm.addassetfromurl('https://talhaceliktas.com/clomosyImgs/newLoginBG.jpg')
+  kayitForm.SetFormBGImage('newLoginBG.jpg');
+ 
+ 
+ 
+  kayitLogoPanel = kayitForm.AddNewProPanel(kayitForm,'kayitLogoPanel');
+  clComponent.SetupComponent(kayitLogoPanel,'{"Align" : "Top",
+  "BackgroundColor":"#D9D9D9", "Height":109}');
+
+  bankaIsmiLbl = kayitForm.AddNewLabel(kayitLogoPanel,'bankaIsmiLbl','ClomoBank');
+  bankaIsmiLbl.Align = alLeft
+  bankaIsmiLbl.Margins.Left = 40;
+  bankaIsmiLbl.StyledSettings = ssFamily;
+  bankaIsmiLbl.TextSettings.Font.Size = 40;
+  bankaIsmiLbl.Width = 300;
+
+  adEdit = kayitForm.AddNewProEdit(kayitForm, 'adEdit', 'Ad');
+  clComponent.SetupComponent(adEdit,'{"Align" : "Center",
+  "RoundHeight":27,"RoundWidth":27,"BorderColor":"#000000", 
+  "BorderWidth":2,"Width":594, "Height":66}');
+  adEdit.Margins.Bottom = 600;
+  adEdit.StyledSettings = ssFamily;
+  adEdit.TextSettings.Font.Size = 32;
+  
+  soyadEdit = kayitForm.AddNewProEdit(kayitForm, 'soyadEdit', 'Soyad');
+  clComponent.SetupComponent(soyadEdit,'{"Align" : "Center",
+  "RoundHeight":27,"RoundWidth":27,"BorderColor":"#000000", 
+  "BorderWidth":2,"Width":594, "Height":66}');
+  soyadEdit.Margins.Bottom = 400;
+  soyadEdit.StyledSettings = ssFamily;
+  soyadEdit.TextSettings.Font.Size = 32;
+ 
+  tcEdit = kayitForm.AddNewProEdit(kayitForm, 'tcEdit', 'T.C. Kimlik No');
+  clComponent.SetupComponent(tcEdit,'{"Align" : "Center",
+  "RoundHeight":27,"RoundWidth":27,"BorderColor":"#000000", 
+  "BorderWidth":2,"Width":594, "Height":66}');
+  tcEdit.Margins.Bottom = 200;
+  tcEdit.StyledSettings = ssFamily;
+  tcEdit.TextSettings.Font.Size = 32;
+
+  sifreEdit = kayitForm.AddNewProEdit(kayitForm, 'sifreEdit', 'Şifre');
+  clComponent.SetupComponent(sifreEdit,'{"Align" : "Center",
+  "RoundHeight":27,"RoundWidth":27,"BorderColor":"#000000", 
+  "BorderWidth":2,"Width":594, "Height":66}');
+  sifreEdit.Margins.Bottom = 0;
+  sifreEdit.StyledSettings = ssFamily;
+  sifreEdit.TextSettings.Font.Size = 32;
+
+  onaylamaCkBx = kayitForm.AddNewCheckBox(kayitForm,'onaylamaCkBx','');
+  onaylamaCkBx.Align = alCenter
+  onaylamaCkBx.Margins.Top = 100;
+  onaylamaCkBx.Margins.Right = 170;
+  onaylamaCkBx.Scale.X = 2; 
+  onaylamaCkBx.Scale.Y = 2; 
+
+  bilgilendirmeLbl = kayitForm.AddNewLabel(kayitForm,'bilgilendirmeLbl','6698 Sayılı Kanun uyarınca Aydınlatma Metni’ni okudum.');
+  bilgilendirmeLbl.Align = alCenter
+  bilgilendirmeLbl.Margins.Top = 194;
+  bilgilendirmeLbl.Margins.Left = 240;
+  bilgilendirmeLbl.Width = 700;
+  bilgilendirmeLbl.Height = 30;
+  bilgilendirmeLbl.StyledSettings = ssFamily;
+  bilgilendirmeLbl.TextSettings.Font.Size = 20;
+
+ 
+
+  kayitOlBtn = kayitForm.AddNewProButton(kayitForm,'kayitOlBtn','Kayıt Ol');
+  clComponent.SetupComponent(kayitOlBtn,'{"Align" : "Center",
+  "RoundHeight":27,"RoundWidth":27,"BorderColor":"#000000", 
+  "BorderWidth":2,"Width":300, "Height":66, "MarginTop" : 400, "TextSize":30}');
+
+
+  if(kayitForm.clWidth < 400){
+  clComponent.SetupComponent(adEdit,'{"RoundHeight":15,"RoundWidth":15,"Width":200, "Height":30}');
+  adEdit.Margins.Bottom = 400;
+  adEdit.StyledSettings = ssFamily;
+  adEdit.TextSettings.Font.Size = 18;
+  
+  
+  clComponent.SetupComponent(soyadEdit,'{"RoundHeight":15,"RoundWidth":15,"Width":200, "Height":30}');
+  soyadEdit.Margins.Bottom = 300;
+  soyadEdit.StyledSettings = ssFamily;
+  soyadEdit.TextSettings.Font.Size = 18;
+  
+  clComponent.SetupComponent(tcEdit,'{"RoundHeight":15,"RoundWidth":15,"Width":200, "Height":30}');
+  tcEdit.Margins.Bottom = 200;
+  tcEdit.StyledSettings = ssFamily;
+  tcEdit.TextSettings.Font.Size = 18;
+  
+  clComponent.SetupComponent(sifreEdit,'{"RoundHeight":15,"RoundWidth":15,"Width":200, "Height":30}');
+  sifreEdit.Margins.Bottom = 100;
+  sifreEdit.StyledSettings = ssFamily;
+  sifreEdit.TextSettings.Font.Size = 18;
+  
+  onaylamaCkBx.Margins.Top = 100;
+  onaylamaCkBx.Margins.Right = 100;
+  onaylamaCkBx.Scale.X = 1; 
+  onaylamaCkBx.Scale.Y = 1; 
+  
+  bilgilendirmeLbl.Margins.Top = 100;
+  bilgilendirmeLbl.Margins.Left = 100;
+  bilgilendirmeLbl.Width = 200;
+  bilgilendirmeLbl.Height = 30;
+  bilgilendirmeLbl.StyledSettings = ssFamily;
+  bilgilendirmeLbl.TextSettings.Font.Size = 13;
+  
+  clComponent.SetupComponent(kayitOlBtn,'{"RoundHeight":20,"RoundWidth":20,"BorderColor":"#000000", 
+  "BorderWidth":2,"Width":200, "Height":40, "MarginTop" : 400, "TextSize":18}');
+
+  }
+
+  kayitForm.AddNewEvent(kayitOlBtn,tbeOnClick,'kullaniciyiKaydet');
+  
+  kayitForm.Run;
+}
