@@ -19,7 +19,7 @@ Kullanıcıların banka hesaplarını yönetebileceği, para transferi yapabilec
 
 | Katman       | Teknoloji        | Açıklama                                                        |
 |--------------|------------------|------------------------------------------------------------------|
-| Arayüz (UI)  | Turboject         | Kullanıcı dostu ve modern arayüz tasarımı                       |
+| Arayüz (UI)  | TROBJECT         | Kullanıcı dostu ve modern arayüz tasarımı                       |
 | Veritabanı   | MySQL            | Hesap, işlem ve kullanıcı verilerinin saklanması                |
 | API          | Node.js          | İş mantığı ve veri alışverişi için hızlı ve güvenli sunucu katmanı |
 
