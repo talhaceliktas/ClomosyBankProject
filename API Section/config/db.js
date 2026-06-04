@@ -1,5 +1,5 @@
-const mysql = require('mysql2');
-require('dotenv').config();
+const mysql = require("mysql2");
+require("dotenv").config();
 
 const pool = mysql.createPool({
   host: process.env.DB_HOST,
@@ -10,15 +10,16 @@ const pool = mysql.createPool({
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
-  ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : undefined
+  ssl:
+    process.env.DB_SSL === "true" ? { rejectUnauthorized: false } : undefined,
 });
 
 pool.getConnection((err, conn) => {
   if (err) {
-    console.error('DB Bağlantı Hatası:', err);
+    console.error("DB Bağlantı Hatası:", err);
     return;
   }
-  console.log('MySQL Bağlantısı başarılı!');
+  console.log("MySQL Bağlantısı başarılı!");
   conn.release();
 });
 
