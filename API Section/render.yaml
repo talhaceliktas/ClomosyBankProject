@@ -8,15 +8,13 @@ services:
     envVars:
       - key: NODE_ENV
         value: production
-      - key: DB_HOST
+      - key: MYSQLHOST
         sync: false
-      - key: DB_PORT
+      - key: MYSQLPORT
         sync: false
-      - key: DB_USER
+      - key: MYSQLUSER
         sync: false
-      - key: DB_PASS
+      - key: MYSQLPASSWORD
         sync: false
-      - key: DB_NAME
+      - key: MYSQLDATABASE
         sync: false
-      - key: DB_SSL
-        value: "true"

@@ -1,59 +1,82 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const db = require('../config/db');
+const db = require("../config/db");
 
 // Kontrol login
-router.post('/kontrol-login', (req, res) => {
+router.post("/kontrol-login", (req, res) => {
   const { tcKimlik, sifre } = req.body;
 
   if (!tcKimlik || !sifre) {
-    return res.status(400).json({ exists: 'TC Kimlik ve şifre gerekli' });
+    return res.status(400).json({ exists: "TC Kimlik ve şifre gerekli" });
   }
 
-  const sql = 'SELECT * FROM TableMusteriler WHERE TCKimlik = ? AND Sifre = ?';
+  const sql = "SELECT * FROM TableMusteriler WHERE TCKimlik = ? AND Sifre = ?";
   db.query(sql, [tcKimlik, sifre], (err, results) => {
-    if (err) return res.status(500).json({ exists: 'Veritabanı hatası' });
+    if (err) return res.status(500).json({ exists: "Veritabanı hatası" });
 
     if (results.length > 0) {
-      res.json({ exists: true, message: 'Müşteri bulundu', user: results[0] });
+      res.json({ exists: true, message: "Müşteri bulundu", user: results[0] });
     } else {
-      res.status(404).json({ exists: 'TC veya şifre hatalı' });
+      res.status(404).json({ exists: "TC veya şifre hatalı" });
     }
   });
 });
 
-router.post('/yeni-kayit', (req, res) => {
+router.post("/yeni-kayit", async (req, res) => {
   const { tcKimlik, sifre, ad, soyad } = req.body;
 
   if (!tcKimlik || !sifre || !ad || !soyad) {
-    return res.status(400).json({ message: 'Tüm alanlar gereklidir' });
+    return res.status(400).json({ message: "Tüm alanlar gereklidir" });
   }
 
-  // Önce TC Kimlik kontrolü
-  const kontrolSQL = 'SELECT * FROM TableMusteriler WHERE TCKimlik = ?';
-  db.query(kontrolSQL, [tcKimlik], (err, results) => {
-    if (err) return res.status(500).json({ message: 'Veritabanı hatası', detail: err });
+  const pool = db.promise();
 
-    if (results.length > 0) {
-      return res.status(409).json({ message: 'Bu TC Kimlik numarası zaten kayıtlı' });
+  try {
+    const [kontrolRows] = await pool.query(
+      "SELECT MusteriID FROM TableMusteriler WHERE TCKimlik = ?",
+      [tcKimlik],
+    );
+    if (kontrolRows.length > 0) {
+      return res
+        .status(409)
+        .json({ message: "Bu TC Kimlik numarası zaten kayıtlı" });
     }
 
-    // TC yoksa yeni kayıt ekle
-    const ekleSQL = 'CALL YeniMusteriEkle(?, ?, ?, ?)';
-    db.query(ekleSQL, [tcKimlik, sifre, ad, soyad], (err2) => {
-      if (err2) return res.status(500).json({ error: 'Kayıt sırasında hata oluştu', detail: err2 });
-      res.json({message: 'Kaydınız başarıyla tamamlandı!' });
-    });
-  });
+    const [insertResult] = await pool.query(
+      "INSERT INTO TableMusteriler (TCKimlik, Sifre, Ad, Soyad) VALUES (?, ?, ?, ?)",
+      [tcKimlik, sifre, ad, soyad],
+    );
+
+    const musteriID = insertResult.insertId;
+    const k1 = musteriID * 10 + 1;
+    const k2 = musteriID * 10 + 2;
+    const k3 = musteriID * 10 + 3;
+    const k4 = musteriID * 10 + 4;
+
+    await pool.query(
+      "INSERT INTO TableBankaHesaplar (KartID, IBAN, Bakiye, MusteriID, Altin, Dolar, Sterlin, Euro) VALUES (?, ?, 5000, ?, 0, 0, 0, 0), (?, ?, 5000, ?, 0, 0, 0, 0)",
+      [k1, "42354" + k1, musteriID, k2, "42354" + k2, musteriID],
+    );
+
+    await pool.query(
+      "INSERT INTO TableKrediHesaplar (MusteriID, KartID, BorcMik, KartLim, TCKimlik) VALUES (?, ?, 5000, 45000, ?), (?, ?, 5000, 45000, ?)",
+      [musteriID, k3, tcKimlik, musteriID, k4, tcKimlik],
+    );
+
+    res.json({ message: "Kaydınız başarıyla tamamlandı!" });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ error: "Kayıt sırasında hata oluştu", detail: err.message });
+  }
 });
 
-
 // Hesap bilgilerini getir
-router.post('/hesap-bilgileri', (req, res) => {
+router.post("/hesap-bilgileri", (req, res) => {
   const { tcKimlik } = req.body;
 
   if (!tcKimlik) {
-    return res.status(400).json({ message: 'TC Kimlik gerekli' });
+    return res.status(400).json({ message: "TC Kimlik gerekli" });
   }
 
   const sql = `
@@ -96,11 +119,11 @@ router.post('/hesap-bilgileri', (req, res) => {
   db.query(sql, [tcKimlik], (err, results) => {
     if (err) {
       console.error("SQL Hatası:", err);
-      return res.status(500).json({ error: 'Veritabanı hatası', detail: err });
+      return res.status(500).json({ error: "Veritabanı hatası", detail: err });
     }
 
     if (results.length === 0) {
-      return res.status(404).json({ message: 'Müşteri bulunamadı' });
+      return res.status(404).json({ message: "Müşteri bulunamadı" });
     }
 
     console.log("Hesap bilgisi sonucu:", results[0]);
@@ -109,13 +132,11 @@ router.post('/hesap-bilgileri', (req, res) => {
   });
 });
 
-
-
-router.post('/kredi-bilgileri', (req, res) => {
+router.post("/kredi-bilgileri", (req, res) => {
   const { tcKimlik } = req.body;
 
   if (!tcKimlik) {
-    return res.status(400).json({ message: 'TC Kimlik gerekli' });
+    return res.status(400).json({ message: "TC Kimlik gerekli" });
   }
 
   const sql = `
@@ -145,24 +166,24 @@ router.post('/kredi-bilgileri', (req, res) => {
   db.query(sql, [tcKimlik], (err, results) => {
     if (err) {
       console.error("SQL Hatası:", err);
-      return res.status(500).json({ error: 'Veritabanı hatası', detail: err });
+      return res.status(500).json({ error: "Veritabanı hatası", detail: err });
     }
 
     if (results.length === 0) {
-      return res.status(404).json({ message: 'Kredi hesap bilgisi bulunamadı' });
+      return res
+        .status(404)
+        .json({ message: "Kredi hesap bilgisi bulunamadı" });
     }
 
     res.json(results[0]); // Ad, Soyad ve kart bilgileri tek JSON olarak döner
   });
 });
 
-
-
-router.post('/kullanici-iban-bakiye', (req, res) => {
+router.post("/kullanici-iban-bakiye", (req, res) => {
   const { tcKimlik } = req.body;
 
   if (!tcKimlik) {
-    return res.status(400).json({ message: 'TC Kimlik gerekli' });
+    return res.status(400).json({ message: "TC Kimlik gerekli" });
   }
 
   const sql = `
@@ -189,47 +210,55 @@ router.post('/kullanici-iban-bakiye', (req, res) => {
   db.query(sql, [tcKimlik], (err, results) => {
     if (err) {
       console.error("SQL Hatası:", err);
-      return res.status(500).json({ message: 'Veritabanı hatası', detail: err });
+      return res
+        .status(500)
+        .json({ message: "Veritabanı hatası", detail: err });
     }
 
     if (results.length === 0) {
-      return res.status(404).json({ message: 'Müşteri bulunamadı' });
+      return res.status(404).json({ message: "Müşteri bulunamadı" });
     }
 
     res.json(results[0]); // Tek JSON nesnesi
   });
 });
 
-
-
-router.post('/iban-transfer', (req, res) => {
+router.post("/iban-transfer", (req, res) => {
   const { gonderenIBAN, aliciIBAN, miktar } = req.body;
 
   if (!gonderenIBAN || !aliciIBAN || !miktar) {
-    return res.status(400).json({ message: 'Tüm alanlar zorunludur' });
+    return res.status(400).json({ message: "Tüm alanlar zorunludur" });
   }
 
   // Gönderen IBAN kontrol ve bakiye sorgusu
   const gonderenSQL = `SELECT Bakiye, KartID FROM TableBankaHesaplar WHERE IBAN = ?`;
 
   db.query(gonderenSQL, [gonderenIBAN], (err, gonderenRes) => {
-    if (err) return res.status(500).json({ message: 'Veritabanı hatası', detail: err });
+    if (err)
+      return res
+        .status(500)
+        .json({ message: "Veritabanı hatası", detail: err });
 
-    if (gonderenRes.length === 0) return res.status(404).json({ message: 'Gönderen IBAN bulunamadı' });
+    if (gonderenRes.length === 0)
+      return res.status(404).json({ message: "Gönderen IBAN bulunamadı" });
 
     const gonderen = gonderenRes[0];
 
     if (gonderen.Bakiye < miktar) {
-      return res.status(400).json({ message: 'Yetersiz bakiye' });
+      return res.status(400).json({ message: "Yetersiz bakiye" });
     }
 
     // Alıcı IBAN kontrolü
     const aliciSQL = `SELECT KartID FROM TableBankaHesaplar WHERE IBAN = ?`;
 
     db.query(aliciSQL, [aliciIBAN], (err2, aliciRes) => {
-      if (err2) return res.status(500).json({ message: 'Veritabanı hatası', detail: err2 });
+      if (err2)
+        return res
+          .status(500)
+          .json({ message: "Veritabanı hatası", detail: err2 });
 
-      if (aliciRes.length === 0) return res.status(404).json({ message: 'Alıcı IBAN geçersiz' });
+      if (aliciRes.length === 0)
+        return res.status(404).json({ message: "Alıcı IBAN geçersiz" });
 
       const aliciKartID = aliciRes[0].KartID;
 
@@ -238,24 +267,29 @@ router.post('/iban-transfer', (req, res) => {
       const aliciGuncelle = `UPDATE TableBankaHesaplar SET Bakiye = Bakiye + ? WHERE KartID = ?`;
 
       db.query(gonderenGuncelle, [miktar, gonderen.KartID], (err3) => {
-        if (err3) return res.status(500).json({ message: 'Gönderen güncellenemedi', detail: err3 });
+        if (err3)
+          return res
+            .status(500)
+            .json({ message: "Gönderen güncellenemedi", detail: err3 });
 
         db.query(aliciGuncelle, [miktar, aliciKartID], (err4) => {
-          if (err4) return res.status(500).json({ message: 'Alıcı güncellenemedi', detail: err4 });
+          if (err4)
+            return res
+              .status(500)
+              .json({ message: "Alıcı güncellenemedi", detail: err4 });
 
-          return res.json({ message: 'IBAN transferi başarılı!' });
+          return res.json({ message: "IBAN transferi başarılı!" });
         });
       });
     });
   });
 });
 
-
-router.post('/kredi-ve-banka-ozeti', (req, res) => {
+router.post("/kredi-ve-banka-ozeti", (req, res) => {
   const { tcKimlik } = req.body;
 
   if (!tcKimlik) {
-    return res.status(400).json({ message: 'TC Kimlik gerekli' });
+    return res.status(400).json({ message: "TC Kimlik gerekli" });
   }
 
   const sql = `
@@ -294,27 +328,25 @@ router.post('/kredi-ve-banka-ozeti', (req, res) => {
   db.query(sql, [tcKimlik], (err, results) => {
     if (err) {
       console.error("SQL Hatası:", err);
-      return res.status(500).json({ message: 'Veritabanı hatası', detail: err });
+      return res
+        .status(500)
+        .json({ message: "Veritabanı hatası", detail: err });
     }
 
     if (results.length === 0) {
-      return res.status(404).json({ message: 'Müşteri bulunamadı' });
+      return res.status(404).json({ message: "Müşteri bulunamadı" });
     }
 
     res.json(results[0]);
   });
 });
 
-
-
-
-
-
-router.post('/kredi-karti-borc-odeme', (req, res) => {
-  const { tcKimlik, krediKartiSecimi, bankaKartiSecimi, odemeTutari } = req.body;
+router.post("/kredi-karti-borc-odeme", (req, res) => {
+  const { tcKimlik, krediKartiSecimi, bankaKartiSecimi, odemeTutari } =
+    req.body;
 
   if (!tcKimlik || !krediKartiSecimi || !bankaKartiSecimi || !odemeTutari) {
-    return res.status(400).json({ message: 'Tüm alanlar zorunludur' });
+    return res.status(400).json({ message: "Tüm alanlar zorunludur" });
   }
 
   // Parse string to int
@@ -323,15 +355,21 @@ router.post('/kredi-karti-borc-odeme', (req, res) => {
   const odeme = parseInt(odemeTutari, 10);
 
   if (isNaN(krediSec) || isNaN(bankaSec) || isNaN(odeme) || odeme <= 0) {
-    return res.status(400).json({ message: 'Geçersiz kart seçimi veya ödeme tutarı' });
+    return res
+      .status(400)
+      .json({ message: "Geçersiz kart seçimi veya ödeme tutarı" });
   }
 
   // MusteriID'yi bul
   const musteriSql = `SELECT MusteriID FROM TableMusteriler WHERE TCKimlik = ? LIMIT 1`;
 
   db.query(musteriSql, [tcKimlik], (err, musteriSonuc) => {
-    if (err) return res.status(500).json({ message: 'Müşteri sorgu hatası', detail: err });
-    if (musteriSonuc.length === 0) return res.status(404).json({ message: 'Müşteri bulunamadı' });
+    if (err)
+      return res
+        .status(500)
+        .json({ message: "Müşteri sorgu hatası", detail: err });
+    if (musteriSonuc.length === 0)
+      return res.status(404).json({ message: "Müşteri bulunamadı" });
 
     const musteriID = musteriSonuc[0].MusteriID;
 
@@ -351,21 +389,31 @@ router.post('/kredi-karti-borc-odeme', (req, res) => {
     `;
 
     db.query(krediSql, [musteriID, krediKartID], (err1, krediSonuc) => {
-      if (err1) return res.status(500).json({ message: 'Kredi kartı sorgu hatası', detail: err1 });
-      if (krediSonuc.length === 0) return res.status(404).json({ message: 'Kredi kartı bulunamadı' });
+      if (err1)
+        return res
+          .status(500)
+          .json({ message: "Kredi kartı sorgu hatası", detail: err1 });
+      if (krediSonuc.length === 0)
+        return res.status(404).json({ message: "Kredi kartı bulunamadı" });
 
       db.query(bankaSql, [musteriID, bankaKartID], (err2, bankaSonuc) => {
-        if (err2) return res.status(500).json({ message: 'Banka kartı sorgu hatası', detail: err2 });
-        if (bankaSonuc.length === 0) return res.status(404).json({ message: 'Banka kartı bulunamadı' });
+        if (err2)
+          return res
+            .status(500)
+            .json({ message: "Banka kartı sorgu hatası", detail: err2 });
+        if (bankaSonuc.length === 0)
+          return res.status(404).json({ message: "Banka kartı bulunamadı" });
 
         const krediKartBorcu = krediSonuc[0].BorcMik;
         const bankaBakiye = bankaSonuc[0].Bakiye;
 
         if (bankaBakiye < odeme) {
-          return res.status(400).json({ message: 'Yetersiz bakiye' });
+          return res.status(400).json({ message: "Yetersiz bakiye" });
         }
         if (krediKartBorcu <= 0) {
-          return res.status(400).json({ message: 'Bu kartın borcu bulunmamaktadır' });
+          return res
+            .status(400)
+            .json({ message: "Bu kartın borcu bulunmamaktadır" });
         }
 
         const guncelOdeme = Math.min(odeme, krediKartBorcu);
@@ -377,33 +425,47 @@ router.post('/kredi-karti-borc-odeme', (req, res) => {
           WHERE MusteriID = ? AND KartID = ?;
         `;
 
-        db.query(updateKrediSQL, [guncelOdeme, guncelOdeme, musteriID, krediKartID], (err3) => {
-          if (err3) return res.status(500).json({ message: 'Kredi güncelleme hatası', detail: err3 });
+        db.query(
+          updateKrediSQL,
+          [guncelOdeme, guncelOdeme, musteriID, krediKartID],
+          (err3) => {
+            if (err3)
+              return res
+                .status(500)
+                .json({ message: "Kredi güncelleme hatası", detail: err3 });
 
-          const updateBankaSQL = `
+            const updateBankaSQL = `
             UPDATE TableBankaHesaplar 
             SET Bakiye = Bakiye - ?
             WHERE MusteriID = ? AND KartID = ?;
           `;
 
-          db.query(updateBankaSQL, [guncelOdeme, musteriID, bankaKartID], (err4) => {
-            if (err4) return res.status(500).json({ message: 'Banka güncelleme hatası', detail: err4 });
+            db.query(
+              updateBankaSQL,
+              [guncelOdeme, musteriID, bankaKartID],
+              (err4) => {
+                if (err4)
+                  return res
+                    .status(500)
+                    .json({ message: "Banka güncelleme hatası", detail: err4 });
 
-            return res.json({ message: `Borç başarıyla ödendi. Ödenen tutar: ${guncelOdeme}TL` });
-          });
-        });
+                return res.json({
+                  message: `Borç başarıyla ödendi. Ödenen tutar: ${guncelOdeme}TL`,
+                });
+              },
+            );
+          },
+        );
       });
     });
   });
 });
 
-
-
-router.post('/kredi-ve-banka-limiti-ve-bakiye', (req, res) => {
+router.post("/kredi-ve-banka-limiti-ve-bakiye", (req, res) => {
   const { tcKimlik } = req.body;
 
   if (!tcKimlik) {
-    return res.status(400).json({ message: 'TC Kimlik gerekli' });
+    return res.status(400).json({ message: "TC Kimlik gerekli" });
   }
 
   const sql = `
@@ -442,30 +504,32 @@ router.post('/kredi-ve-banka-limiti-ve-bakiye', (req, res) => {
   db.query(sql, [tcKimlik], (err, results) => {
     if (err) {
       console.error("SQL Hatası:", err);
-      return res.status(500).json({ message: 'Veritabanı hatası', detail: err });
+      return res
+        .status(500)
+        .json({ message: "Veritabanı hatası", detail: err });
     }
 
     if (results.length === 0) {
-      return res.status(404).json({ message: 'Müşteri bulunamadı' });
+      return res.status(404).json({ message: "Müşteri bulunamadı" });
     }
 
     res.json(results[0]);
   });
 });
 
-
-
-
-router.post('/kredi-cek', (req, res) => {
-  const { tcKimlik, krediKartiSecimi, bankaKartiSecimi, cekilecekTutar } = req.body;
+router.post("/kredi-cek", (req, res) => {
+  const { tcKimlik, krediKartiSecimi, bankaKartiSecimi, cekilecekTutar } =
+    req.body;
 
   if (!tcKimlik || !krediKartiSecimi || !bankaKartiSecimi || !cekilecekTutar) {
-    return res.status(400).json({ message: 'Tüm alanlar zorunludur' });
+    return res.status(400).json({ message: "Tüm alanlar zorunludur" });
   }
 
   const tutar = parseFloat(cekilecekTutar);
   if (isNaN(tutar) || tutar <= 0) {
-    return res.status(400).json({ message: 'Geçerli bir çekilecek tutar giriniz' });
+    return res
+      .status(400)
+      .json({ message: "Geçerli bir çekilecek tutar giriniz" });
   }
 
   const krediKartIndex = krediKartiSecimi === "1" ? 1 : 0;
@@ -488,18 +552,26 @@ router.post('/kredi-cek', (req, res) => {
   db.query(sql, [krediKartIndex, bankaKartIndex, tcKimlik], (err, results) => {
     if (err) {
       console.error("SQL Hatası:", err);
-      return res.status(500).json({ message: 'Veritabanı hatası', detail: err });
+      return res
+        .status(500)
+        .json({ message: "Veritabanı hatası", detail: err });
     }
 
     if (results.length === 0) {
-      return res.status(404).json({ message: 'Müşteri veya kart bilgileri bulunamadı' });
+      return res
+        .status(404)
+        .json({ message: "Müşteri veya kart bilgileri bulunamadı" });
     }
 
     const krediKart = results[0];
     const kullanilabilirLimit = krediKart.KartLim - krediKart.BorcMik;
 
     if (kullanilabilirLimit < tutar) {
-      return res.status(400).json({ message: `Yetersiz limit. Kullanılabilir limit: ${kullanilabilirLimit}` });
+      return res
+        .status(400)
+        .json({
+          message: `Yetersiz limit. Kullanılabilir limit: ${kullanilabilirLimit}`,
+        });
     }
 
     // Kredi kartı borcunu ve kart limitini güncelle
@@ -509,40 +581,49 @@ router.post('/kredi-cek', (req, res) => {
       WHERE KartID = ?;
     `;
 
-    db.query(updateKrediSQL, [toplamBorçArtışı, tutar, krediKart.KartID], (err1) => {
-      if (err1) {
-        console.error("Kredi kartı güncelleme hatası:", err1);
-        return res.status(500).json({ message: 'Kredi kartı güncelleme hatası', detail: err1 });
-      }
+    db.query(
+      updateKrediSQL,
+      [toplamBorçArtışı, tutar, krediKart.KartID],
+      (err1) => {
+        if (err1) {
+          console.error("Kredi kartı güncelleme hatası:", err1);
+          return res
+            .status(500)
+            .json({ message: "Kredi kartı güncelleme hatası", detail: err1 });
+        }
 
-      // Banka hesabına tutarı yükle
-      const updateBankaSQL = `
+        // Banka hesabına tutarı yükle
+        const updateBankaSQL = `
         UPDATE TableBankaHesaplar
         SET Bakiye = Bakiye + ?
         WHERE KartID = ?;
       `;
 
-      db.query(updateBankaSQL, [tutar, krediKart.bankaKartID], (err2) => {
-        if (err2) {
-          console.error("Banka hesabı güncelleme hatası:", err2);
-          return res.status(500).json({ message: 'Banka hesabı güncelleme hatası', detail: err2 });
-        }
+        db.query(updateBankaSQL, [tutar, krediKart.bankaKartID], (err2) => {
+          if (err2) {
+            console.error("Banka hesabı güncelleme hatası:", err2);
+            return res
+              .status(500)
+              .json({
+                message: "Banka hesabı güncelleme hatası",
+                detail: err2,
+              });
+          }
 
-        return res.json({
-          message: `Kredi çekme işlemi başarılı. Çekilen tutar: ${tutar}TL, toplam borcunuz: ${krediKart.BorcMik + toplamBorçArtışı}TL, kalan kart limiti: ${krediKart.KartLim - tutar}TL`
+          return res.json({
+            message: `Kredi çekme işlemi başarılı. Çekilen tutar: ${tutar}TL, toplam borcunuz: ${krediKart.BorcMik + toplamBorçArtışı}TL, kalan kart limiti: ${krediKart.KartLim - tutar}TL`,
+          });
         });
-      });
-    });
+      },
+    );
   });
 });
 
-
-
-router.post('/tum-varliklar', async (req, res) => {
+router.post("/tum-varliklar", async (req, res) => {
   const { tcKimlik } = req.body;
 
   if (!tcKimlik) {
-    return res.status(400).json({ message: 'TC Kimlik gerekli' });
+    return res.status(400).json({ message: "TC Kimlik gerekli" });
   }
 
   const sql = `
@@ -562,12 +643,12 @@ router.post('/tum-varliklar', async (req, res) => {
 
   db.query(sql, [tcKimlik], (err, results) => {
     if (err) {
-      console.error('SQL Hatası:', err);
-      return res.status(500).json({ message: 'Veritabanı hatası' });
+      console.error("SQL Hatası:", err);
+      return res.status(500).json({ message: "Veritabanı hatası" });
     }
 
     if (results.length !== 2) {
-      return res.status(404).json({ message: '2 banka hesabı bulunamadı' });
+      return res.status(404).json({ message: "2 banka hesabı bulunamadı" });
     }
 
     const [hesap1, hesap2] = results;
@@ -587,16 +668,14 @@ router.post('/tum-varliklar', async (req, res) => {
       altinGram2: hesap2.Altin,
       dolarUSD2: hesap2.Dolar,
       euroEUR2: hesap2.Euro,
-      sterlinGBP2: hesap2.Sterlin
+      sterlinGBP2: hesap2.Sterlin,
     };
 
     res.json(veri);
   });
 });
 
-
-
-router.post('/satin-al', (req, res) => {
+router.post("/satin-al", (req, res) => {
   const { TCKimlik, kart, yatirilanTL, alinanTip } = req.body;
 
   // Validasyon
@@ -615,21 +694,21 @@ router.post('/satin-al', (req, res) => {
     1: "gram_altin",
     2: "amerikan_dolari",
     3: "euro",
-    4: "sterlin"
+    4: "sterlin",
   };
 
   const kolonIsimleri = {
     1: "Altin",
     2: "Dolar",
     3: "Euro",
-    4: "Sterlin"
+    4: "Sterlin",
   };
 
   const displayNames = {
     gram_altin: "Gram Altın",
     amerikan_dolari: "Amerikan Doları",
     euro: "Euro",
-    sterlin: "Sterlin"
+    sterlin: "Sterlin",
   };
 
   const alinacakKurIsmi = kurIsimleri[alinanTipInt];
@@ -639,13 +718,15 @@ router.post('/satin-al', (req, res) => {
   // 1. MusteriID bul
   const musteriSorgu = `SELECT MusteriID FROM TableMusteriler WHERE TCKimlik = ? LIMIT 1`;
   db.query(musteriSorgu, [TCKimlik], (err, musteriSonuc) => {
-    if (err) return res.status(500).json({ message: "Müşteri sorgu hatası", err });
-    if (musteriSonuc.length === 0) return res.status(404).json({ message: "Müşteri bulunamadı" });
+    if (err)
+      return res.status(500).json({ message: "Müşteri sorgu hatası", err });
+    if (musteriSonuc.length === 0)
+      return res.status(404).json({ message: "Müşteri bulunamadı" });
 
     const MusteriID = musteriSonuc[0].MusteriID;
 
     // KartID oluştur (MusteriID + kart string)
-    const KartID = parseInt('' + MusteriID + kart); // Örn: 24 + "1" = 241
+    const KartID = parseInt("" + MusteriID + kart); // Örn: 24 + "1" = 241
 
     // 2. Hesap sorgusu
     const hesapSorgu = `
@@ -655,8 +736,10 @@ router.post('/satin-al', (req, res) => {
       LIMIT 1
     `;
     db.query(hesapSorgu, [MusteriID, KartID], (err2, hesapSonuc) => {
-      if (err2) return res.status(500).json({ message: "Hesap sorgu hatası", err2 });
-      if (hesapSonuc.length === 0) return res.status(404).json({ message: "Hesap bulunamadı" });
+      if (err2)
+        return res.status(500).json({ message: "Hesap sorgu hatası", err2 });
+      if (hesapSonuc.length === 0)
+        return res.status(404).json({ message: "Hesap bulunamadı" });
 
       const hesap = hesapSonuc[0];
 
@@ -672,8 +755,12 @@ router.post('/satin-al', (req, res) => {
         LIMIT 1
       `;
       db.query(kurSorgu, [alinacakKurIsmi], (err3, kurSonuc) => {
-        if (err3) return res.status(500).json({ message: "Kur fiyatı sorgu hatası", err3 });
-        if (kurSonuc.length === 0) return res.status(404).json({ message: "Kur fiyatı bulunamadı" });
+        if (err3)
+          return res
+            .status(500)
+            .json({ message: "Kur fiyatı sorgu hatası", err3 });
+        if (kurSonuc.length === 0)
+          return res.status(404).json({ message: "Kur fiyatı bulunamadı" });
 
         const kurFiyati = kurSonuc[0].TLDegeri;
         const alinacakMiktar = miktarTL / kurFiyati;
@@ -686,13 +773,16 @@ router.post('/satin-al', (req, res) => {
           WHERE KartID = ?
         `;
         db.query(guncelle, [miktarTL, alinacakMiktar, KartID], (err4) => {
-          if (err4) return res.status(500).json({ message: "Hesap güncelleme hatası", err4 });
+          if (err4)
+            return res
+              .status(500)
+              .json({ message: "Hesap güncelleme hatası", err4 });
 
           return res.json({
             message: `${displayNames[alinacakKurIsmi]} başarıyla satın alındı, miktar: ${alinacakMiktar.toFixed(4)}.`,
             alinanKur: alinacakKurIsmi,
             miktar: alinacakMiktar.toFixed(4),
-            kalanTL: (hesap.Bakiye - miktarTL).toFixed(2)
+            kalanTL: (hesap.Bakiye - miktarTL).toFixed(2),
           });
         });
       });
@@ -700,10 +790,7 @@ router.post('/satin-al', (req, res) => {
   });
 });
 
-
-
-
-router.post('/sat', (req, res) => {
+router.post("/sat", (req, res) => {
   const { TCKimlik, kart, satilanMiktar, satilanTip } = req.body;
 
   if (
@@ -721,14 +808,14 @@ router.post('/sat', (req, res) => {
     1: "gram_altin",
     2: "amerikan_dolari",
     3: "euro",
-    4: "sterlin"
+    4: "sterlin",
   };
 
   const kolonIsimleri = {
     1: "Altin",
     2: "Dolar",
     3: "Euro",
-    4: "Sterlin"
+    4: "Sterlin",
   };
 
   // Kullanıcıya gösterilecek okunabilir isimler:
@@ -736,7 +823,7 @@ router.post('/sat', (req, res) => {
     gram_altin: "Gram Altın",
     amerikan_dolari: "Amerikan Doları",
     euro: "Euro",
-    sterlin: "Sterlin"
+    sterlin: "Sterlin",
   };
 
   const satilanKurIsmi = kurIsimleri[satilanTipInt];
@@ -746,11 +833,13 @@ router.post('/sat', (req, res) => {
   // 1. MusteriID bul
   const musteriSorgu = `SELECT MusteriID FROM TableMusteriler WHERE TCKimlik = ? LIMIT 1`;
   db.query(musteriSorgu, [TCKimlik], (err, musteriSonuc) => {
-    if (err) return res.status(500).json({ message: "Müşteri sorgu hatası", err });
-    if (musteriSonuc.length === 0) return res.status(404).json({ message: "Müşteri bulunamadı" });
+    if (err)
+      return res.status(500).json({ message: "Müşteri sorgu hatası", err });
+    if (musteriSonuc.length === 0)
+      return res.status(404).json({ message: "Müşteri bulunamadı" });
 
     const MusteriID = musteriSonuc[0].MusteriID;
-    const KartID = parseInt('' + MusteriID + kart);
+    const KartID = parseInt("" + MusteriID + kart);
 
     // 2. Hesap sorgu - ilgili kur miktarını kontrol et
     const hesapSorgu = `
@@ -760,13 +849,19 @@ router.post('/sat', (req, res) => {
       LIMIT 1
     `;
     db.query(hesapSorgu, [MusteriID, KartID], (err2, hesapSonuc) => {
-      if (err2) return res.status(500).json({ message: "Hesap sorgu hatası", err2 });
-      if (hesapSonuc.length === 0) return res.status(404).json({ message: "Hesap bulunamadı" });
+      if (err2)
+        return res.status(500).json({ message: "Hesap sorgu hatası", err2 });
+      if (hesapSonuc.length === 0)
+        return res.status(404).json({ message: "Hesap bulunamadı" });
 
       const hesap = hesapSonuc[0];
 
       if (hesap[kolonAdi] < miktar) {
-        return res.status(400).json({ message: `Yetersiz ${displayNames[satilanKurIsmi]} bakiyesi` });
+        return res
+          .status(400)
+          .json({
+            message: `Yetersiz ${displayNames[satilanKurIsmi]} bakiyesi`,
+          });
       }
 
       // 3. Kur fiyatı al
@@ -777,8 +872,12 @@ router.post('/sat', (req, res) => {
         LIMIT 1
       `;
       db.query(kurSorgu, [satilanKurIsmi], (err3, kurSonuc) => {
-        if (err3) return res.status(500).json({ message: "Kur fiyatı sorgu hatası", err3 });
-        if (kurSonuc.length === 0) return res.status(404).json({ message: "Kur fiyatı bulunamadı" });
+        if (err3)
+          return res
+            .status(500)
+            .json({ message: "Kur fiyatı sorgu hatası", err3 });
+        if (kurSonuc.length === 0)
+          return res.status(404).json({ message: "Kur fiyatı bulunamadı" });
 
         const kurFiyati = kurSonuc[0].TLDegeri;
         const kazanilanTL = miktar * kurFiyati;
@@ -791,30 +890,23 @@ router.post('/sat', (req, res) => {
           WHERE KartID = ?
         `;
         db.query(guncelle, [kazanilanTL, miktar, KartID], (err4) => {
-          if (err4) return res.status(500).json({ message: "Hesap güncelleme hatası", err4 });
+          if (err4)
+            return res
+              .status(500)
+              .json({ message: "Hesap güncelleme hatası", err4 });
 
-        return res.json({
-          message: `${displayNames[satilanKurIsmi]} başarıyla satıldı. Kazanılan TL: ${kazanilanTL.toFixed(2)} TL.`,
-          satilanKur: displayNames[satilanKurIsmi],
-          satilanMiktar: miktar.toFixed(4),
-          kazanilanTL: kazanilanTL.toFixed(2),
-          yeniBakiye: (hesap.Bakiye + kazanilanTL).toFixed(2),
-          kalanKur: (hesap[kolonAdi] - miktar).toFixed(4),
-        });
+          return res.json({
+            message: `${displayNames[satilanKurIsmi]} başarıyla satıldı. Kazanılan TL: ${kazanilanTL.toFixed(2)} TL.`,
+            satilanKur: displayNames[satilanKurIsmi],
+            satilanMiktar: miktar.toFixed(4),
+            kazanilanTL: kazanilanTL.toFixed(2),
+            yeniBakiye: (hesap.Bakiye + kazanilanTL).toFixed(2),
+            kalanKur: (hesap[kolonAdi] - miktar).toFixed(4),
+          });
         });
       });
     });
   });
 });
-
-
-
-
-
-
-
-
-
-
 
 module.exports = router;
