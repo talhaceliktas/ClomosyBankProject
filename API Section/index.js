@@ -5,6 +5,8 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json());
 
+app.get('/health', (req, res) => res.status(200).json({ status: 'ok' }));
+
 // Burada 'user' dosyasını 'musteriler' olarak kullanıyoruz çünkü müşteri işlemleri orada
 const musteriRoutes = require('./api/musteriler');
 app.use('/api/musteriler', musteriRoutes);
