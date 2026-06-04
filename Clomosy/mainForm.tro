@@ -101,7 +101,7 @@ dovizEuroBakiye1, dovizEuroBakiye2, dovizSterlinBakiye1, dovizSterlinBakiye2 : S
 
 {
     clRestDovizGuncelle=TCLRest.Create; 
-     clRestDovizGuncelle.BaseURL = 'https://clomosy.talhaceliktas.com/api/musteriler/tum-varliklar'; 
+     clRestDovizGuncelle.BaseURL = 'https://clomosybankproject.onrender.com/api/musteriler/tum-varliklar'; 
      clRestDovizGuncelle.Accept = 'application/json'; 
      clRestDovizGuncelle.Method = rmPOST;
      queryDovizGuncelle = '{"tcKimlik": "' + tcKimlik +'"}';
@@ -165,7 +165,7 @@ secilenKrediKartiDoviz, secilenDovizTuru: Integer
   secilenDovizTuru = radioGrupDoviz.ItemIndex + 1;
     clRestDovizAl=TCLRest.Create; 
 
-     clRestDovizAl.BaseURL = 'https://clomosy.talhaceliktas.com/api/musteriler/satin-al'; 
+     clRestDovizAl.BaseURL = 'https://clomosybankproject.onrender.com/api/musteriler/satin-al'; 
      clRestDovizAl.Accept = 'application/json'; 
      clRestDovizAl.Method = rmPOST;
     
@@ -211,7 +211,7 @@ secilenKrediKartiDoviz, secilenDovizTuru: Integer
 
     clRestDovizSat=TCLRest.Create; 
 
-     clRestDovizSat.BaseURL = 'https://clomosy.talhaceliktas.com/api/musteriler/sat'; 
+     clRestDovizSat.BaseURL = 'https://clomosybankproject.onrender.com/api/musteriler/sat'; 
      clRestDovizSat.Accept = 'application/json'; 
      clRestDovizSat.Method = rmPOST;
     
@@ -327,7 +327,7 @@ krediKartLimitKrediler1, krediKartLimitKrediler2, bankaKartiBakiyeKrediler1, ban
      // Post 
     
      
-     clRestKrediler.BaseURL = 'https://clomosy.talhaceliktas.com/api/musteriler/kredi-ve-banka-limiti-ve-bakiye'; 
+     clRestKrediler.BaseURL = 'https://clomosybankproject.onrender.com/api/musteriler/kredi-ve-banka-limiti-ve-bakiye'; 
      clRestKrediler.Accept = 'application/json'; 
      clRestKrediler.Method = rmPOST;
     
@@ -383,7 +383,7 @@ secilenKrediKartiKrediler, secilenBankaKartiKrediler : Integer
   secilenBankaKartiKrediler = radioGrupKrediler1.ItemIndex + 1;
   secilenKrediKartiKrediler = radioGrupKrediler2.ItemIndex + 1;
     clRestKrediCek=TCLRest.Create; 
-     clRestKrediCek.BaseURL = 'https://clomosy.talhaceliktas.com/api/musteriler/kredi-cek'; 
+     clRestKrediCek.BaseURL = 'https://clomosybankproject.onrender.com/api/musteriler/kredi-cek'; 
      clRestKrediCek.Accept = 'application/json'; 
      clRestKrediCek.Method = rmPOST;
     
@@ -453,7 +453,7 @@ odemelerKalanBorc1, odemelerKalanBorc2, odemelerIban1, odemelerIban2,  odemelerB
      // Post 
     
      
-     clRestOdemeler.BaseURL = 'https://clomosy.talhaceliktas.com/api/musteriler/kredi-ve-banka-ozeti'; 
+     clRestOdemeler.BaseURL = 'https://clomosybankproject.onrender.com/api/musteriler/kredi-ve-banka-ozeti'; 
      clRestOdemeler.Accept = 'application/json'; 
      clRestOdemeler.Method = rmPOST;
     
@@ -514,7 +514,7 @@ clRestOdemeYap : TCLRest;
   
 
     clRestOdemeYap=TCLRest.Create; 
-     clRestOdemeYap.BaseURL = 'https://clomosy.talhaceliktas.com/api/musteriler/kredi-karti-borc-odeme'; 
+     clRestOdemeYap.BaseURL = 'https://clomosybankproject.onrender.com/api/musteriler/kredi-karti-borc-odeme'; 
      clRestOdemeYap.Accept = 'application/json'; 
      clRestOdemeYap.Method = rmPOST;
     
@@ -580,7 +580,7 @@ clRestTransfer : TCLRest;
      // Post 
     
      
-     clRestTransfer.BaseURL = 'https://clomosy.talhaceliktas.com/api/musteriler/kullanici-iban-bakiye'; 
+     clRestTransfer.BaseURL = 'https://clomosybankproject.onrender.com/api/musteriler/kullanici-iban-bakiye'; 
      clRestTransfer.Accept = 'application/json'; 
      clRestTransfer.Method = rmPOST;
     
@@ -646,7 +646,7 @@ clRestTransferAktarim : TCLRest;
      // Post 
     
      
-     clRestTransferAktarim.BaseURL = 'https://clomosy.talhaceliktas.com/api/musteriler/iban-transfer'; 
+     clRestTransferAktarim.BaseURL = 'https://clomosybankproject.onrender.com/api/musteriler/iban-transfer'; 
      clRestTransferAktarim.Accept = 'application/json'; 
      clRestTransferAktarim.Method = rmPOST;
     
@@ -716,7 +716,7 @@ clRestKartlar : TCLRest;
   }
   clRestKartlar=TCLRest.Create; 
 
-     clRestKartlar.BaseURL = 'https://clomosy.talhaceliktas.com/api/musteriler/kredi-bilgileri'; 
+     clRestKartlar.BaseURL = 'https://clomosybankproject.onrender.com/api/musteriler/kredi-bilgileri'; 
      clRestKartlar.Accept = 'application/json'; 
      clRestKartlar.Method = rmPOST;
     
@@ -799,7 +799,7 @@ clRestHesaplar : TCLRest;
   hesaplarPanel.Height = 800;
   }
     clRestHesaplar=TCLRest.Create; 
-     clRestHesaplar.BaseURL = 'https://clomosy.talhaceliktas.com/api/musteriler/hesap-bilgileri'; 
+     clRestHesaplar.BaseURL = 'https://clomosybankproject.onrender.com/api/musteriler/hesap-bilgileri'; 
      clRestHesaplar.Accept = 'application/json'; 
      clRestHesaplar.Method = rmPOST;
     

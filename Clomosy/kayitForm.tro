@@ -20,7 +20,7 @@ void kullaniciyiKaydet;
      // Post 
     
      
-     clRest.BaseURL = 'https://clomosy.talhaceliktas.com/api/musteriler/yeni-kayit'; 
+     clRest.BaseURL = 'https://clomosybankproject.onrender.com/api/musteriler/yeni-kayit'; 
      clRest.Accept = 'application/json'; 
      clRest.Method = rmPOST;
      
